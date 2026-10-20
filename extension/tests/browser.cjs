@@ -1,7 +1,7 @@
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const fs=require('node:fs');const path=require('node:path');const http=require('node:http');const assert=require('node:assert/strict');
 (async()=>{
- const extension=path.resolve(__dirname,'..');
+ const extension=process.env.URL_LOUPE_EXTENSION_DIR || path.resolve(__dirname,'..');
  const profile=fs.mkdtempSync(path.join(require('node:os').tmpdir(),'host-lens-browser-'));
  const artifacts=process.env.HOST_LENS_ARTIFACTS || path.resolve(extension,'..');
  const server=http.createServer((req,res)=>{res.setHeader('content-type','text/html;charset=utf-8');res.end('<!doctype html><html lang="zh"><body><h1>域名字符检查测试</h1><a id="link" href="https://аррӏе.com/path?x=hello">普通显示文字</a><p><a id="ascii" href="https://Inkd.in/enHTuknJ">LinkedIn 短链接测试</a></p></body></html>');});
@@ -10,7 +10,7 @@ const fs=require('node:fs');const path=require('node:path');const http=require('
  try{
   context=await chromium.launchPersistentContext(profile,{headless:true,channel:'chromium',args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`],viewport:{width:900,height:760}});
   const settings=await context.newPage();await settings.goto('chrome://extensions');
-  const item=settings.locator('extensions-item').filter({hasText:'Host Lens'});await item.waitFor();
+  const item=settings.locator('extensions-item').filter({hasText:'URL Loupe'});await item.waitFor();
   const id=await item.getAttribute('id');assert.ok(id);
   const page=await context.newPage();await page.goto(`http://127.0.0.1:${server.address().port}`);
   await page.locator('#link').hover();await page.locator('host-lens-inspector').waitFor();

@@ -1,14 +1,20 @@
 {
   "manifest_version": 3,
-  "name": "URL Loupe · URL 放大镜",
-  "version": "0.2.2",
-  "description": "本地逐字符检查网址主机名，标记非 ASCII 字符及视觉相似字符。",
+  "name": "__MSG_extensionName__",
+  "version": "0.3.0",
+  "description": "__MSG_extensionDescription__",
   "permissions": [
     "activeTab"
   ],
   "action": {
-    "default_title": "检查域名字符",
-    "default_popup": "popup.html"
+    "default_title": "__MSG_actionTitle__",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
   },
   "content_scripts": [
     {
@@ -19,6 +25,7 @@
       "js": [
         "vendor/punycode.js",
         "vendor/confusables.js",
+        "i18n.js",
         "analyzer.js",
         "render.js",
         "content.js"
@@ -31,5 +38,13 @@
   },
   "background": {
     "service_worker": "background.js"
+  },
+  "default_locale": "en",
+  "homepage_url": "https://loupe.zhaidewei.com/",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
   }
 }

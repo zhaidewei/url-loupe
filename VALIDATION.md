@@ -79,3 +79,11 @@ Node.js 22.23.1；`npm test`：14/14 通过。
 - 隔离 Chromium 未覆盖 DNS、未忽略证书错误，访问正式 HTTPS 地址返回 200。英文/中文、671 家参考库、LinkedIn i/l、Amazon rn/m、非 ASCII、输入原文保持、手机布局通过。
 - 浏览器未出现脚本或控制台错误，没有请求输入的目标网站或 /api/。
 - 仅部署静态资源，无数据库、定时任务或运行中的业务 API。GitHub Actions 未启用。
+
+## Chrome Web Store 材料（2026-10-20）
+
+- extension/ 升级到 0.3.0，支持英文/中文。19 项扩展单测与原有网站/CLI 17 项通过。
+- 新增公开双语隐私政策 /privacy.html，正式网站与政策页浏览器 HTTP 200 验证通过。部署版本 c9e24ac5-d524-47ff-9753-0e9241bad1c5。
+- 商店图标 128×128，三张真实截图 1280×800（24-bit PNG），小宣传图 440×280，可选大宣传图 1400×560。
+- 商店文案、权限说明和测试步骤位于 store/，插件打包脚本 scripts/package-extension.mjs 生成根目录含 manifest.json 的上传 ZIP。
+- 未向 Chrome Web Store 提交或发布。

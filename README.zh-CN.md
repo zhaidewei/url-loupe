@@ -94,3 +94,7 @@ Wikidata 结构化数据采用 CC0；Unicode 数据、punycode.js、tldts 和 tl
 ## 子域名部署
 
 线上地址：https://loupe.zhaidewei.com 。通过 Cloudflare Workers Static Assets 托管 public/；仅部署静态文件，不部署本地 Node/SQLite 服务。配置见 wrangler.toml，Cloudflare 管理该子域名的 DNS 与 TLS。重新部署时先构建和测试，再运行 npx wrangler@4.127.0 deploy；凭据由本地登录或 secret CLI 在使用点提供，不写入仓库。
+
+## Chrome 商店材料
+
+extension/ 当前商店准备版为 0.3.0，新增英文／简体中文与面板语言切换，仍仅做字符检查。打包运行 `node scripts/package-extension.mjs`。商店介绍、权限与隐私填写说明及图片在 store/，公开隐私政策为 https://loupe.zhaidewei.com/privacy.html 。插件 ZIP 已在隔离 Chrome 中加载验证；尚未上传或提交商店审核。

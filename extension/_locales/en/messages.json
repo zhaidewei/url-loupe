@@ -1,0 +1,11 @@
+{
+  "extensionName": {
+    "message": "URL Loupe"
+  },
+  "extensionDescription": {
+    "message": "Inspect non-ASCII and visually similar hostname characters locally, from links, the toolbar or host + Tab."
+  },
+  "actionTitle": {
+    "message": "Inspect hostname characters"
+  }
+}

@@ -8,7 +8,7 @@ A closer look at every URL. Inspect non-ASCII hostname characters and brand look
 
 - **Website**: instant character and brand comparison, fragment-to-explanation links, English by default with a Chinese toggle.
 - **CLI**: offline JSON Lines output for scripts and AI agents; bundled references, no runtime dependencies.
-- **Chrome extension**: character inspection through the popup, link hover and `host` + Tab. The extension is an earlier character-only version; website brand matching has not yet been ported. Its current UI is Chinese.
+- **Chrome extension**: character inspection through the popup, link hover and `host` + Tab. The extension is an earlier character-only version; website brand matching has not yet been ported. It supports English and Simplified Chinese, with a popup language toggle.
 
 ## Run locally
 
@@ -65,3 +65,7 @@ npm run build
 npm test
 npx wrangler@4.127.0 deploy
 ```
+
+## Chrome Web Store package
+
+The extension is version 0.3.0. Run `node scripts/package-extension.mjs` to build the upload ZIP with manifest.json at its root. Store copy and submission notes are in [store/](store/). Public privacy policy: https://loupe.zhaidewei.com/privacy.html. The developer dashboard submission has not been performed.

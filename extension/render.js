@@ -1,4 +1,6 @@
 (() => {
+  const tr=value=>globalThis.HostLensI18n?.text(value)??value;
+  const hints=t=>t.hints.map(tr);
   const styles = `
     :host{all:initial;color-scheme:light;font:14px/1.6 system-ui,sans-serif;color:#172033}
     *{box-sizing:border-box} .card{font:14px/1.6 system-ui,sans-serif;color:#172033;background:#fff;border:1px solid #cbd5e1;border-radius:14px;padding:16px;box-shadow:0 12px 40px #0f172a28;overflow-wrap:anywhere}
@@ -17,7 +19,7 @@
       const span = document.createElement('span');
       span.className = 'char'+(t.nonAscii ? ' nonascii':'')+(t.similar ? ' similar':'');
       span.textContent = t.char;
-      span.title = [t.code, t.nonAscii ? '非 ASCII 字符' : 'ASCII 字符', ...t.hints].join('；');
+      span.title = [t.code, tr(t.nonAscii ? '非 ASCII 字符' : 'ASCII 字符'), ...hints(t)].join('；');
       span.setAttribute('aria-label', t.char+' '+span.title);
       line.append(span);
     }
@@ -27,7 +29,7 @@
     root.replaceChildren();
     const style = document.createElement('style'); style.textContent = styles; root.append(style);
     const card = document.createElement('section'); card.className='card'; root.append(card);
-    const add = (tag, text, cls) => { const e=document.createElement(tag); e.textContent=text; if(cls)e.className=cls; card.append(e); return e; };
+    const add = (tag, text, cls) => { const e=document.createElement(tag); e.textContent=tr(text); if(cls)e.className=cls; card.append(e); return e; };
     add('h2','Host Lens · 域名字符检查');
     add('div','粉色＝非 ASCII　金框＝视觉相似字符','legend');
     if (data.nonAsciiCount > 0) {
@@ -43,7 +45,7 @@
     for(const t of [...data.tokens,...(data.originalTokens||[])]) {
       if ((!t.nonAscii && !t.similar) || seen.has(t.char)) continue;
       seen.add(t.char); const row=document.createElement('div'); row.className='detail';
-      row.textContent=`${t.char} · ${t.code} · ${[t.nonAscii?'非 ASCII':'ASCII',...t.hints].join('；')}`; details.append(row);
+      row.textContent=`${t.char} · ${t.code} · ${[tr(t.nonAscii?'非 ASCII':'ASCII'),...hints(t)].join('；')}`; details.append(row);
     }
     add('p','字符提示不代表恶意判定。普通英文域名和中文域名也可能出现高亮。');
   }
