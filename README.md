@@ -53,3 +53,15 @@ Builds generate public/engine.js and cli/url-loupe.mjs. Browser integration test
 ## License
 
 Original code: MIT. Third-party code and Unicode data retain their licenses in public/vendor/ and extension/vendor/. Wikidata structured data is CC0. Brand names are used only to identify reference candidates.
+
+## Deployment
+
+Cloudflare Workers Static Assets configuration is in wrangler.toml. Only public/ is deployed; the local Node/SQLite backend and extension are not uploaded. The configured custom domain is https://loupe.zhaidewei.com.
+
+Deploy from this repository with Wrangler 4.127.0 after building and testing. Authenticate locally; do not put API tokens in tracked files. The custom domain requires access to the zhaidewei.com Cloudflare zone. DNS and TLS are managed by Cloudflare.
+
+```sh
+npm run build
+npm test
+npx wrangler@4.127.0 deploy
+```

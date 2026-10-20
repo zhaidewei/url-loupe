@@ -70,3 +70,12 @@ Node.js 22.23.1；`npm test`：14/14 通过。
 - 浏览器覆盖英文默认、中文切换、原始中文 host 与路径参数保持、桌面和手机布局。
 - 网站/CLI 单测 17 项、扩展单测 17 项通过。MIT 与第三方许可证随源码公开，运行数据库、本地依赖和环境文件不进入 Git。
 - 网站和 CLI 为当前功能版本；extension/ 保留较早的字符检查版，尚未同步品牌比对与英文界面。未部署子域名。
+
+## 子域名上线（2026-10-20）
+
+- 地址：https://loupe.zhaidewei.com 。Cloudflare 自定义域名绑定到 url-loupe 的 production 环境，enabled=true，证书已关联。
+- Cloudflare 部署版本：b3afb4a3-f6f9-40b2-a15f-e38129a8dce4；部署来源为本仓库 public/，包含放大镜 favicon 与静态安全响应头。
+- 公共 DNS（1.1.1.1）及 Node DNS resolve4 均返回有效地址；本机 curl 默认解析仍缓存先前的解析失败，指定公共 DNS 地址后 HTTPS 验证正常（没有跳过证书校验）。
+- 隔离 Chromium 未覆盖 DNS、未忽略证书错误，访问正式 HTTPS 地址返回 200。英文/中文、671 家参考库、LinkedIn i/l、Amazon rn/m、非 ASCII、输入原文保持、手机布局通过。
+- 浏览器未出现脚本或控制台错误，没有请求输入的目标网站或 /api/。
+- 仅部署静态资源，无数据库、定时任务或运行中的业务 API。GitHub Actions 未启用。

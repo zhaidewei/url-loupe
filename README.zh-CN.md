@@ -90,3 +90,7 @@ npm test
 ## 第三方数据与代码
 
 Wikidata 结构化数据采用 CC0；Unicode 数据、punycode.js、tldts 和 tldts-core 许可保存在 `public/vendor/`。依赖版本见 package-lock.json。公司名称仅用于指示可能相似的参考对象。
+
+## 子域名部署
+
+线上地址：https://loupe.zhaidewei.com 。通过 Cloudflare Workers Static Assets 托管 public/；仅部署静态文件，不部署本地 Node/SQLite 服务。配置见 wrangler.toml，Cloudflare 管理该子域名的 DNS 与 TLS。重新部署时先构建和测试，再运行 npx wrangler@4.127.0 deploy；凭据由本地登录或 secret CLI 在使用点提供，不写入仓库。
