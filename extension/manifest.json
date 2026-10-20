@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "URL Loupe · URL 放大镜",
+  "version": "0.2.2",
+  "description": "本地逐字符检查网址主机名，标记非 ASCII 字符及视觉相似字符。",
+  "permissions": [
+    "activeTab"
+  ],
+  "action": {
+    "default_title": "检查域名字符",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "vendor/punycode.js",
+        "vendor/confusables.js",
+        "analyzer.js",
+        "render.js",
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "omnibox": {
+    "keyword": "host"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

@@ -1,0 +1,82 @@
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const fs=require('node:fs');const path=require('node:path');const http=require('node:http');const assert=require('node:assert/strict');
+(async()=>{
+ const extension=path.resolve(__dirname,'..');
+ const profile=fs.mkdtempSync(path.join(require('node:os').tmpdir(),'host-lens-browser-'));
+ const artifacts=process.env.HOST_LENS_ARTIFACTS || path.resolve(extension,'..');
+ const server=http.createServer((req,res)=>{res.setHeader('content-type','text/html;charset=utf-8');res.end('<!doctype html><html lang="zh"><body><h1>域名字符检查测试</h1><a id="link" href="https://аррӏе.com/path?x=hello">普通显示文字</a><p><a id="ascii" href="https://Inkd.in/enHTuknJ">LinkedIn 短链接测试</a></p></body></html>');});
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));
+ let context;
+ try{
+  context=await chromium.launchPersistentContext(profile,{headless:true,channel:'chromium',args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`],viewport:{width:900,height:760}});
+  const settings=await context.newPage();await settings.goto('chrome://extensions');
+  const item=settings.locator('extensions-item').filter({hasText:'Host Lens'});await item.waitFor();
+  const id=await item.getAttribute('id');assert.ok(id);
+  const page=await context.newPage();await page.goto(`http://127.0.0.1:${server.address().port}`);
+  await page.locator('#link').hover();await page.locator('host-lens-inspector').waitFor();
+  assert.equal(await page.locator('#link').textContent(),'普通显示文字');
+  assert.equal(await page.locator('#link').getAttribute('href'),'https://аррӏе.com/path?x=hello');
+  await page.screenshot({path:path.join(artifacts,'host-lens-hover.png')});
+  await page.keyboard.press('Escape');await page.locator('host-lens-inspector').waitFor({state:'detached'});
+  await page.evaluate(()=>{const a=document.createElement('a');a.id='dynamic';a.href='https://Inkd.in/a';a.textContent='动态链接';document.body.append(a);});
+  await page.locator('#dynamic').focus();await page.locator('host-lens-inspector').waitFor();
+  await page.keyboard.press('Escape');
+  const popup=await context.newPage();await popup.goto(`chrome-extension://${id}/popup.html`);
+  await popup.locator('button[data-example="https://аррӏе.com"]').click();
+  assert.equal(await popup.locator('#result .nonascii').count(),5);
+  assert.equal(await popup.locator('#result .warning[role=alert]').count(),1);
+  assert.equal(await popup.locator('#result .nonascii.similar').count(),5);
+  assert.ok((await popup.locator('#result .encoded').textContent()).startsWith('xn--'));
+  await popup.locator('body').screenshot({path:path.join(artifacts,'host-lens-popup.png')});
+  await popup.locator('[data-example="https://Inkd.in/enHTuknJ"]').click();
+  assert.equal(await popup.locator('#result .nonascii').count(),0);
+  assert.equal(await popup.locator('#result .warning').count(),0);
+  assert.ok(await popup.locator('#result .similar').count()>0);
+  await popup.locator('#url').fill('https://safe.test/中文?x=а');
+  assert.equal(await popup.locator('#result .nonascii').count(),0);
+  await popup.locator('#url').fill('javascript:alert(1)');
+  assert.ok(await popup.locator('#error').textContent());assert.equal(await popup.locator('#result .card').count(),0);
+  for(const host of ['bücher.test','παράδειγμα.test','مثال.test','उदाहरण.test','例子.test','例え.test','예시.test','😀.test','ｅxample.test']){
+    await popup.locator('#url').fill('https://'+host);
+    assert.equal(await popup.locator('#result .warning[role=alert]').count(),1,host);
+    assert.ok(await popup.locator('#result .nonascii').count()>0,host);
+  }
+  console.log('PASS: all nine non-ASCII host examples show highlights and an explicit alert; ASCII host and Unicode paths do not trigger non-ASCII warnings.');
+  assert.equal(await popup.locator('button[type="submit"]').count(),0);
+  await popup.locator('#url').fill('');
+  assert.equal(await popup.locator('#result .card').count(),0);
+  assert.equal(await popup.locator('#error').textContent(),'');
+  await popup.locator('#url').pressSequentially('example.test');
+  assert.equal(await popup.locator('#result .encoded').textContent(),'example.test');
+  await popup.locator('#url').evaluate(input=>{
+    input.dispatchEvent(new CompositionEvent('compositionstart',{bubbles:true}));
+    input.value='https://例子.test';
+    input.dispatchEvent(new InputEvent('input',{bubbles:true,isComposing:true}));
+  });
+  assert.equal(await popup.locator('#result .encoded').textContent(),'example.test');
+  await popup.locator('#url').evaluate(input=>input.dispatchEvent(new CompositionEvent('compositionend',{bubbles:true})));
+  assert.equal(await popup.locator('#result .warning[role=alert]').count(),1);
+  assert.equal(await popup.locator('#result .nonascii').count(),2);
+  await popup.locator('body').screenshot({path:path.join(artifacts,'host-lens-live-input.png')});
+  console.log('PASS: no check button; fill and typing trigger immediate analysis; clearing removes stale output; IME composition waits until committed.');
+  const worker=context.serviceWorkers()[0] || await context.waitForEvent('serviceworker');
+  const description=await worker.evaluate(async()=>{
+    const result=HostLensOmnibox.describe('https://аpple.test/path');
+    await chrome.omnibox.setDefaultSuggestion({description:result.description});
+    return result.description;
+  });
+  assert.ok(description.includes('<match>а</match>'));
+  const reviewPromise=context.waitForEvent('page');
+  await worker.evaluate(()=>openHostReview('https://user:secret@аpple.test/private?token=hidden','newForegroundTab'));
+  const review=await reviewPromise;await review.waitForLoadState();
+  await review.locator('#result .nonascii').first().waitFor();
+  assert.equal(await review.locator('#url').inputValue(),'аpple.test');
+  assert.ok(review.url().startsWith('chrome-extension://'));
+  assert.ok(!review.url().includes('secret') && !review.url().includes('hidden'));
+  assert.equal(await review.locator('#result .nonascii').count(),1);
+  await review.screenshot({path:path.join(artifacts,'host-lens-omnibox-review.png')});
+  await worker.evaluate(()=>openHostReview('javascript:alert(1)','newForegroundTab'));
+  console.log('PASS: omnibox worker loads; suggestion markup accepted by Chrome; Enter handler opens local review with Unicode highlighter; credentials and path omitted.');
+  console.log('PASS: MV3 extension loads; popup highlights Cyrillic and ASCII lookalikes; paths excluded; invalid URL error; hover/focus/dynamic anchors; Esc dismisses; link text and href unchanged.');
+ }finally{await context?.close();server.close();fs.rmSync(profile,{recursive:true,force:true});}
+})().catch(e=>{console.error(e);process.exitCode=1});

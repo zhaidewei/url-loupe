@@ -1,0 +1,1 @@
+SELECT ?company ?companyLabel ?website ?sitelinks WHERE { { SELECT ?company ?sitelinks WHERE { ?company wikibase:sitelinks ?sitelinks; wdt:P414 ?exchange. FILTER(?sitelinks > 20) } ORDER BY DESC(?sitelinks) LIMIT 1000 } ?company wdt:P856 ?website. SERVICE wikibase:label { bd:serviceParam wikibase:language "en". } }

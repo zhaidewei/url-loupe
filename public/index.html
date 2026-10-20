@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="在本地检查网址中的非 ASCII 字符、视觉相似字符和品牌仿冒线索。"><title>URL Loupe · A closer look at every URL</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/explain.css"></head>
+<body>
+
+<main>
+<section class="hero"><div class="brand-heading"><svg class="loupe-logo" viewBox="0 0 64 64" role="img" aria-label="URL magnifying glass"><circle cx="27" cy="26" r="18" fill="none" stroke="currentColor" stroke-width="3"/><path d="m40 40 15 15" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><text x="27" y="33" text-anchor="middle" font-family="monospace" font-size="25" fill="currentColor">a</text><path d="M20 37h14" stroke="#b13d65" stroke-width="3" stroke-linecap="round"/></svg><h1>URL Loupe</h1></div><button id="language" type="button" class="language-switch" aria-label="Switch language">中文</button></section>
+<section class="checker" aria-label="网址即时检查">
+<label for="url" class="sr-only">输入网址，立即解释</label><div class="url-input"><input id="url" type="text" placeholder="输入或粘贴网址" autocomplete="off" spellcheck="false" maxlength="8192" aria-describedby="privacy-note"><button id="clear" aria-label="清空网址" type="button">×</button></div>
+
+<div class="examples"><button type="button" data-example="https://Inkd.in/enHTuknJ">Inkd.in</button><button type="button" data-example="https://arnazon.test/shop">arnazon.test</button><button type="button" data-example="https://аррӏе.test/login">аррӏе.test</button></div>
+<p id="input-error" class="input-error" role="status"></p>
+</section>
+<section class="explanation" id="explanation" aria-label="网址片段与解释" hidden>
+<div class="sr-only"><span id="character-state"></span><span id="brand-state"></span></div>
+<div id="characters" aria-live="polite"></div>
+<svg id="connections" aria-hidden="true"></svg>
+<div id="brands" class="explain-notes" aria-live="polite"></div>
+</section>
+<div class="utilities">
+<details id="coverage" class="utility-panel coverage"><summary>参考库</summary><div class="utility-content"><span id="dataset-status" class="sr-only" role="status">正在载入参考库…</span><div class="dataset-stats"><div><strong id="company-count">—</strong><span>家公司</span></div><div><strong id="domain-count">—</strong><span>个域名</span></div></div><details><summary>查看来源与公司名单</summary><p class="small" id="coverage-notes"></p><label for="company-search" class="sr-only">搜索公司或域名</label><input id="company-search" placeholder="搜索公司名称或域名" type="search"><div id="company-list"></div><p id="list-count" class="small"></p><p class="small"><a href="https://www.wikidata.org/wiki/Property:P856" target="_blank" rel="noopener noreferrer">Wikidata 官网属性</a> · <a href="https://www.wikidata.org/wiki/Property:P414" target="_blank" rel="noopener noreferrer">交易所属性</a> · <a href="https://www.wikidata.org/wiki/Wikidata:Licensing" target="_blank" rel="noopener noreferrer">CC0 数据许可</a></p></details></div></details>
+<details class="utility-panel" id="about"><summary>关于</summary><div class="utility-content"><p>检查非 ASCII 字符与品牌域名差异，提供核对线索，不作网站安全认证。</p><p id="privacy-note">分析在本地完成，不会访问目标网站。</p></div></details></div></main><footer>本地检查 · 不访问目标网站</footer>
+<script src="/vendor/punycode.js"></script><script src="/vendor/confusables.js"></script><script src="/analyzer.js"></script><script src="/engine.js"></script><script src="/locale.js"></script><script src="/app.js"></script>
+</body></html>

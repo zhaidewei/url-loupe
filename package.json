@@ -1,0 +1,27 @@
+{
+  "name": "url-loupe",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "start": "node server.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "review": "node scripts/review.mjs",
+    "cli": "node cli/url-loupe.mjs"
+  },
+  "dependencies": {
+    "tldts": "7.0.27"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.12"
+  },
+  "bin": {
+    "url-loupe": "cli/url-loupe.mjs"
+  },
+  "license": "MIT",
+  "description": "Offline URL character inspection and brand lookalike hints for browsers and AI agents"
+}

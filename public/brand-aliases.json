@@ -1,0 +1,4 @@
+{
+ "notice":"为具体品牌和短链补充的人工参考，不代表网站安全认证。",
+ "brands":[{"id":"alias-linkedin","name":"LinkedIn 短链","nameEn":"LinkedIn","listedCompanyId":"Q2283","domains":["lnkd.in"],"sitelinks":200,"sourceUrl":"https://www.linkedin.com/help/linkedin/answer/a521889/short-urls-in-shared-posts","relationshipSource":"https://news.microsoft.com/2016/06/13/microsoft-to-acquire-linkedin/","verificationStatus":"manual_brand_reference"}]
+}

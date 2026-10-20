@@ -1,0 +1,310 @@
+{
+  "generatedAt": "2026-10-20T18:12:37.247Z",
+  "metadata": {
+    "title": "知名上市公司官网参考集",
+    "version": 1,
+    "generatedAt": "2026-10-20T18:12:37.247Z",
+    "retrievedAt": "2026-10-20T18:11:41.865Z",
+    "coverageNotes": "全球跨交易所的 Wikidata 高 sitelinks 候选；不保证地域、行业、时效或名单完整性。未独立核验官网；无结束日期不等于当前仍有效。",
+    "source": "Wikidata",
+    "license": "CC0-1.0",
+    "companyCount": 671,
+    "domainCount": 1896,
+    "candidateCount": 720,
+    "eligibleCount": 671,
+    "selection": "按 Wikidata sitelinks 数量降序；最多 750 家",
+    "verificationStatus": "wikidata_record",
+    "notice": "参考集源于 Wikidata 社区记录，未逐家独立核验官网或当前上市状态；收录不代表安全认证，未收录不代表可疑。"
+  },
+  "snapshots": [
+    {
+      "file": "entities/batch-000.json",
+      "retrievedAt": "2026-10-20T18:10:27.805Z",
+      "sourceUrl": "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q215293%7CQ17538813%7CQ503308%7CQ502940%7CQ338633%7CQ249798%7CQ193412%7CQ159433%7CQ188920%7CQ4778915%7CQ173395%7CQ212599%7CQ633839%7CQ3884%7CQ20165%7CQ778126%7CQ1424293%7CQ550258%7CQ544847%7CQ152096%7CQ287471%7CQ1636974%7CQ181642%7CQ898825%7CQ1123823%7CQ219203%7CQ53238%7CQ297879%7CQ568642%7CQ188822%7CQ138133%7CQ329953%7CQ160746%7CQ648280%7CQ2283%7CQ158205%7CQ11463%7CQ37156%7CQ276507%7CQ217493&props=info%7Cclaims%7Clabels&languages=zh%7Cen&format=json"
+    },
+    {
+      "file": "entities/batch-001.json",
+      "retrievedAt": "2026-10-20T18:10:28.054Z",
+      "sourceUrl": "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q215392%7CQ757489%7CQ1770710%7CQ156376%7CQ3077586%7CQ58024%7CQ102673%7CQ1030096%7CQ1034621%7CQ1046951%7CQ1051297%7CQ1054765%7CQ1054787%7CQ1054844%7CQ1056637%7CQ1056839%7CQ1057110%7CQ1057464%7CQ223407%7CQ332477%7CQ106158%7CQ1065088%7CQ1065835%7CQ1066018%7CQ1066858%7CQ1068485%7CQ157852%7CQ59551%7CQ2632892%7CQ552581%7CQ1074666%7CQ30256699%7CQ487292%7CQ1161666%7CQ10910065%7CQ1096013%7CQ193326%7CQ154950%7CQ1113804%7CQ1425316&props=info%7Cclaims%7Clabels&languages=zh%7Cen&format=json"
+    },
+    {
+      "file": "entities/batch-002.json",
+      "retrievedAt": "2026-10-20T18:10:27.693Z",
+      "sourceUrl": "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q1117001%7CQ212235%7CQ1127887%7CQ1129117%7CQ2869596%7CQ113215%7CQ1134069%7CQ135325%7CQ169339%7CQ1136226%7CQ1136885%7CQ1138291%7CQ1139541%7CQ11407%7CQ1141173%7CQ1141123%7CQ1143211%7CQ1145493%7CQ1146592%7CQ1153463%7CQ1155668%7CQ941127%7CQ1172038%7CQ118911%7CQ1190598%7CQ1190881%7CQ1191685%7CQ1192805%7CQ1194832%7CQ1197548%7CQ1218180%7CQ122141%7CQ843887%7CQ1256188%7CQ1258529%7CQ860580%7CQ1260606%7CQ127955%7CQ127962%7CQ1281055&props=info%7Cclaims%7Clabels&languages=zh%7Cen&format=json"
+    },
+    {
+      "file": "entities/batch-003.json",
+      "retrievedAt": "2026-10-20T18:10:30.286Z",
+      "sourceUrl": "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q128446%7CQ1284261%7CQ12857502%7CQ128738%7CQ128896%7CQ14428%7CQ131499%7CQ1318049%7CQ4548%7CQ1319601%7CQ1321815%7CQ1322045%7CQ13227919%7CQ1325369%7CQ13416787%7CQ1343045%7CQ1343118%7CQ1353939%7CQ1359568%7CQ136484%7CQ1368019%7CQ136778%7CQ1368919%7CQ137910%7CQ1384140%7CQ38903%7CQ219501%7CQ1416215%7CQ1418%7CQ1424962%7CQ1425063%7CQ185278%7CQ14289857%7CQ1431486%7CQ1437502%7CQ144060%7CQ144617%7CQ1454852%7CQ14647%7CQ1472929&props=info%7Cclaims%7Clabels&languages=zh%7Cen&format=json"
+    },
+    {
+      "file": "entities/batch-004.json",
+      "retrievedAt": "2026-10-20T18:10:32.344Z",
+      "sourceUrl": "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q1475312%7CQ14772%7CQ1479654%7CQ1481634%7CQ14799%7CQ151107%7CQ151135%7CQ1514221%7CQ76846862%7CQ1520122%7CQ152057%7CQ152864%7CQ153417%7CQ1537378%7CQ1538336%7CQ1538507%7CQ154037%7CQ1542175%7CQ154387%7CQ1543874%7CQ155026%7CQ15548065%7CQ156077%7CQ156238%7CQ156578%7CQ156829%7CQ15678788%7CQ156959%7CQ157062%7CQ1570773%7CQ157617%7CQ157645%7CQ158888%7CQ1591889%7CQ1636958%7CQ159614%7CQ542767%7CQ160054%7CQ1776022%7CQ160229&props=info%7Cclaims%7Clabels&languages=zh%7Cen&format=json"
+    },
+    {
+      "file": "entities/batch-005.json",
+      "retrievedAt": "2026-10-20T18:10:29.713Z",
+      "sourceUrl": "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q161140%7CQ161086%7CQ1613763%7CQ161544%7CQ16161254%7CQ161833%7CQ162257%7CQ162345%7CQ406643%7CQ163241%7CQ1632461%7CQ1642605%7CQ164740%7CQ166621%7CQ166637%7CQ5281%7CQ1672300%7CQ16783523%7CQ168238%7CQ169167%7CQ16972754%7CQ170416%7CQ170614%7CQ515869%7CQ17081612%7CQ26989%7CQ173476%7CQ173941%7CQ1741634%7CQ174198%7CQ17460900%7CQ174747%7CQ174769%7CQ175106%7CQ1762250%7CQ176587%7CQ178778%7CQ179433%7CQ180855%7CQ180816&props=info%7Cclaims%7Clabels&languages=zh%7Cen&format=json"
+    },
+    {
+      "file": "entities/batch-006.json",
+      "retrievedAt": "2026-10-20T18:10:35.505Z",
+      "sourceUrl": "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q18224%7CQ182477%7CQ1850587%7CQ1852556%7CQ185339%7CQ186012%7CQ18653563%7CQ18656%7CQ188273%7CQ188454%7CQ188514%7CQ1885456%7CQ1886126%7CQ188710%7CQ190464%7CQ191551%7CQ191715%7CQ1916402%7CQ500088%7CQ192814%7CQ193136%7CQ193199%7CQ194360%7CQ19593%7CQ196259%7CQ19681433%7CQ1966372%7CQ1974503%7CQ19900%7CQ19923099%7CQ201653%7CQ201691%7CQ201821%7CQ202210%7CQ821293%7CQ204284%7CQ204296%7CQ2047336%7CQ205012%7CQ206921&props=info%7Cclaims%7Clabels&languages=zh%7Cen&format=json"
+    },
+    {
+      "file": "entities/batch-007.json",
+      "retrievedAt": "2026-10-20T18:10:36.887Z",
+      "sourceUrl": "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q20718%7CQ20716%7CQ207770%7CQ207784%7CQ20800404%7CQ208489%7CQ210047%7CQ2103926%7CQ21077%7CQ211165%7CQ2116312%7CQ211906%7CQ212322%7CQ212405%7CQ212433%7CQ212900%7CQ213140%7CQ213147%7CQ80978%7CQ21404084%7CQ2141800%7CQ214346%7CQ214763%7CQ215639%7CQ21683250%7CQ217338%7CQ217583%7CQ217599%7CQ219508%7CQ219635%7CQ221062%7CQ221692%7CQ223127%7CQ2302402%7CQ230426%7CQ2309%7CQ23317%7CQ2389456%7CQ2392255%7CQ242260&props=info%7Cclaims%7Clabels&languages=zh%7Cen&format=json"
+    },
+    {
+      "file": "entities/batch-008.json",
+      "retrievedAt": "2026-10-20T18:10:37.890Z",
+      "sourceUrl": "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q7414%7CQ243278%7CQ245343%7CQ247489%7CQ24890758%7CQ248%7CQ2527941%7CQ2608329%7CQ2609533%7CQ261288%7CQ26298%7CQ26299%7CQ831445%7CQ26463%7CQ312%7CQ265286%7CQ266423%7CQ26678%7CQ267313%7CQ267840%7CQ270223%7CQ270363%7CQ27074%7CQ327646%7CQ27530%7CQ275623%7CQ2759586%7CQ27893%7CQ3295867%7CQ283790%7CQ283852%7CQ285328%7CQ291090%7CQ898750%7CQ291171%7CQ916196%7CQ291796%7CQ292428%7CQ294508%7CQ29560723&props=info%7Cclaims%7Clabels&languages=zh%7Cen&format=json"
+    },
+    {
+      "file": "entities/batch-009.json",
+      "retrievedAt": "2026-10-20T18:11:02.922Z",
+      "sourceUrl": "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q296782%7CQ29803%7CQ29913%7CQ29921278%7CQ301965%7CQ877536%7CQ699848%7CQ370719%7CQ30378%7CQ303580%7CQ306764%7CQ45700%7CQ30873%7CQ308952%7CQ309084%7CQ309865%7CQ310481%7CQ311394%7CQ313542%7CQ319344%7CQ319642%7CQ32141%7CQ32245%7CQ322601%7CQ324603%7CQ32491%7CQ327247%7CQ328840%7CQ329426%7CQ35339%7CQ333101%7CQ333718%7CQ333498%7CQ333894%7CQ334204%7CQ334789%7CQ335147%7CQ34328146%7CQ3485048%7CQ353494&props=info%7Cclaims%7Clabels&languages=zh%7Cen&format=json"
+    },
+    {
+      "file": "entities/batch-010.json",
+      "retrievedAt": "2026-10-20T18:11:07.456Z",
+      "sourceUrl": "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q35349%7CQ35476%7CQ357095%7CQ35953%7CQ36033%7CQ367412%7CQ37158%7CQ373225%7CQ380580%7CQ38076%7CQ380%7CQ390107%7CQ4047174%7CQ407237%7CQ407448%7CQ40993%7CQ41187%7CQ412826%7CQ415598%7CQ420506%7CQ420822%7CQ424846%7CQ44294%7CQ445007%7CQ44504%7CQ451476%7CQ45568%7CQ455971%7CQ459477%7CQ459965%7CQ460487%7CQ461631%7CQ463090%7CQ463094%7CQ466496%7CQ46730%7CQ467752%7CQ470517%7CQ47099%7CQ47528658&props=info%7Cclaims%7Clabels&languages=zh%7Cen&format=json"
+    },
+    {
+      "file": "entities/batch-011.json",
+      "retrievedAt": "2026-10-20T18:11:11.798Z",
+      "sourceUrl": "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q476215%7CQ478214%7CQ482267%7CQ483018%7CQ483238%7CQ483593%7CQ483551%7CQ483946%7CQ483915%7CQ483938%7CQ485593%7CQ486269%7CQ486976%7CQ487494%7CQ487907%7CQ489921%7CQ49053%7CQ491627%7CQ4923294%7CQ493094%7CQ493145%7CQ494917%7CQ496302%7CQ499071%7CQ4995%7CQ499962%7CQ501476%7CQ502125%7CQ502935%7CQ503182%7CQ504998%7CQ50595%7CQ796297%7CQ507154%7CQ507338%7CQ511031%7CQ512468%7CQ513679%7CQ51747%7CQ51756&props=info%7Cclaims%7Clabels&languages=zh%7Cen&format=json"
+    },
+    {
+      "file": "entities/batch-012.json",
+      "retrievedAt": "2026-10-20T18:11:17.878Z",
+      "sourceUrl": "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q518016%7CQ524989%7CQ52618%7CQ52825%7CQ52846%7CQ53227%7CQ53257%7CQ5324516%7CQ53268%7CQ533415%7CQ541477%7CQ5417145%7CQ542511%7CQ548278%7CQ549181%7CQ549498%7CQ555900%7CQ555925%7CQ55931%7CQ562078%7CQ565594%7CQ573103%7CQ583268%7CQ58707%7CQ587270%7CQ590952%7CQ593786%7CQ597394%7CQ60238941%7CQ605233%7CQ605565%7CQ608518%7CQ609466%7CQ620875%7CQ624798%7CQ625713%7CQ62621%7CQ627514%7CQ628051%7CQ629998&props=info%7Cclaims%7Clabels&languages=zh%7Cen&format=json"
+    },
+    {
+      "file": "entities/batch-013.json",
+      "retrievedAt": "2026-10-20T18:11:22.459Z",
+      "sourceUrl": "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q632233%7CQ632694%7CQ636755%7CQ638156%7CQ638398%7CQ638448%7CQ642610%7CQ644324%7CQ645084%7CQ646741%7CQ648828%7CQ649178%7CQ6499202%7CQ6496310%7CQ651222%7CQ654762%7CQ656165%7CQ658242%7CQ658789%7CQ66048%7CQ661845%7CQ663596%7CQ666703%7CQ6686%7CQ668737%7CQ66%7CQ670482%7CQ675585%7CQ677085%7CQ679322%7CQ682759%7CQ685918%7CQ688619%7CQ691508%7CQ691637%7CQ699810%7CQ705392%7CQ706184%7CQ7098994%7CQ713418&props=info%7Cclaims%7Clabels&languages=zh%7Cen&format=json"
+    },
+    {
+      "file": "entities/batch-014.json",
+      "retrievedAt": "2026-10-20T18:11:26.293Z",
+      "sourceUrl": "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q714491%7CQ715113%7CQ715583%7CQ720479%7CQ7240%7CQ72539%7CQ725793%7CQ727883%7CQ730179%7CQ731938%7CQ732670%7CQ733482%7CQ733958%7CQ734338%7CQ735261%7CQ738770%7CQ739416%7CQ741618%7CQ744149%7CQ745099%7CQ745971%7CQ747265%7CQ748148%7CQ74877%7CQ752515%7CQ7555824%7CQ75684%7CQ75729%7CQ757307%7CQ757689%7CQ763402%7CQ773924%7CQ775031%7CQ780442%7CQ790068%7CQ791179%7CQ791285%7CQ794272%7CQ795454%7CQ806189&props=info%7Cclaims%7Clabels&languages=zh%7Cen&format=json"
+    },
+    {
+      "file": "entities/batch-015.json",
+      "retrievedAt": "2026-10-20T18:11:31.102Z",
+      "sourceUrl": "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q806259%7CQ806487%7CQ806693%7CQ8093%7CQ809985%7CQ81230%7CQ818846%7CQ81965%7CQ822614%7CQ824278%7CQ827927%7CQ837049%7CQ838212%7CQ839466%7CQ841263%7CQ842108%7CQ842297%7CQ845632%7CQ847743%7CQ848059%7CQ849404%7CQ852787%7CQ853958%7CQ855479%7CQ855639%7CQ856897%7CQ861042%7CQ864407%7CQ867667%7CQ868259%7CQ870095%7CQ875920%7CQ876017%7CQ8766%7CQ8774%7CQ880942%7CQ895325%7CQ898208%7CQ899133%7CQ908931&props=info%7Cclaims%7Clabels&languages=zh%7Cen&format=json"
+    },
+    {
+      "file": "entities/batch-016.json",
+      "retrievedAt": "2026-10-20T18:11:35.643Z",
+      "sourceUrl": "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q910379%7CQ910401%7CQ917031%7CQ921159%7CQ928831%7CQ931207%7CQ940689%7CQ9401%7CQ942471%7CQ943813%7CQ94933%7CQ949610%7CQ950380%7CQ9584%7CQ95%7CQ963718%7CQ971649%7CQ973054%7CQ97439162%7CQ975655%7CQ990804%7CQ499707%7CQ163560%7CQ2470307%7CQ2247432%7CQ329347%7CQ864923%7CQ188326%7CQ502121%7CQ105557%7CQ1200840%7CQ1549389%7CQ631047%7CQ1049080%7CQ63327%7CQ186394%7CQ1340361%7CQ678565%7CQ632240%7CQ9396&props=info%7Cclaims%7Clabels&languages=zh%7Cen&format=json"
+    },
+    {
+      "file": "entities/batch-017.json",
+      "retrievedAt": "2026-10-20T18:11:41.865Z",
+      "sourceUrl": "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q2311%7CQ1415501%7CQ152433%7CQ163810%7CQ1471346%7CQ334800%7CQ505922%7CQ193701%7CQ2031485%7CQ35996%7CQ1141267%7CQ152051%7CQ856411%7CQ155718%7CQ338825%7CQ481778%7CQ682894%7CQ53247%7CQ1422%7CQ7501150%7CQ1653258%7CQ596139%7CQ645708%7CQ963101%7CQ260833%7CQ2037125%7CQ912778%7CQ3895%7CQ4053147%7CQ368151%7CQ572948%7CQ63035278%7CQ192314%7CQ9325%7CQ926699%7CQ1195543%7CQ995151%7CQ795981%7CQ482539%7CQ862303&props=info%7Cclaims%7Clabels&languages=zh%7Cen&format=json"
+    }
+  ],
+  "excluded": [
+    {
+      "id": "Q95",
+      "reason": "no_unended_stock_exchange_statement"
+    },
+    {
+      "id": "Q14647",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q485593",
+      "reason": "no_unended_stock_exchange_statement"
+    },
+    {
+      "id": "Q191715",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q156376",
+      "reason": "no_unended_stock_exchange_statement"
+    },
+    {
+      "id": "Q847743",
+      "reason": "no_unended_stock_exchange_statement"
+    },
+    {
+      "id": "Q35953",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q214346",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q275623",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q156829",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q185278",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q212900",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q2309",
+      "reason": "no_unended_stock_exchange_statement"
+    },
+    {
+      "id": "Q161833",
+      "reason": "no_unended_stock_exchange_statement"
+    },
+    {
+      "id": "Q160229",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q324603",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q638156",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q76846862",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q327646",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q15678788",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q223407",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q856897",
+      "reason": "no_unended_stock_exchange_statement"
+    },
+    {
+      "id": "Q1190598",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q212433",
+      "reason": "no_unended_stock_exchange_statement"
+    },
+    {
+      "id": "Q654762",
+      "reason": "no_unended_stock_exchange_statement"
+    },
+    {
+      "id": "Q7555824",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q283790",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q855639",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q898825",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q163560",
+      "reason": "no_unended_stock_exchange_statement"
+    },
+    {
+      "id": "Q4995",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q6499202",
+      "reason": "no_unended_stock_exchange_statement"
+    },
+    {
+      "id": "Q1054844",
+      "reason": "no_unended_stock_exchange_statement"
+    },
+    {
+      "id": "Q2141800",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q877536",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q950380",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q301965",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q541477",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q645084",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q757489",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q1191685",
+      "reason": "no_unended_stock_exchange_statement"
+    },
+    {
+      "id": "Q1258529",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q4053147",
+      "reason": "no_unended_stock_exchange_statement"
+    },
+    {
+      "id": "Q1030096",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q1096013",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q542511",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q824278",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q940689",
+      "reason": "dissolved_P576"
+    },
+    {
+      "id": "Q1415501",
+      "reason": "no_unended_stock_exchange_statement"
+    }
+  ],
+  "eligibleNotSelected": []
+}
