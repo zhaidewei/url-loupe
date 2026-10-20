@@ -5,3 +5,4 @@ main{max-width:920px;min-height:calc(100vh - 70px)}.hero{padding:70px 0 28px}.he
 #connections{max-width:100%}
 
 .hero{position:relative}.brand-heading{display:flex;align-items:center;justify-content:center;gap:12px}.loupe-logo{width:46px;height:46px;color:#344b5b;flex:none}.language-switch{position:absolute;right:0;top:24px;border:0;background:transparent;color:#819096;font-size:11px;padding:6px;cursor:pointer}@media(max-width:760px){.loupe-logo{width:38px;height:38px}.language-switch{top:12px}}
+.diff-line>span:first-child{width:64px;white-space:nowrap;word-break:normal}
