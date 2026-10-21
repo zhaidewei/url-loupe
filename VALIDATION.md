@@ -226,3 +226,11 @@ Node.js 22.23.1；`npm test`：14/14 通过。
 - 代码提交 cd6e302 已推送个人 GitHub；Cloudflare 部署版本 83b6ecfa-7c41-45bf-8365-da1a67b67c19，目标 loupe.zhaidewei.com。默认浏览器回归的旧临时数据库参数及临时目录初始化也已移除，不再保留无使用者的测试设置。
 - 正式 HTTPS 网站、英中、6890 个完整 host、LinkedIn i/l、Amazon rn/m、非 ASCII、手机布局、来源与隐私页回读通过，无页面错误、目标网站或 API 请求。/demo 线上英中、链接留页及新插件模型验证通过；隐私页确认 0.4.0、离线品牌参考和最小权限披露。
 - 四张真实新截图和材料 ZIP 已完成，上传插件 ZIP 与源码逐项比对通过。已准备 outputs/url-loupe-chrome-0.4.0 独立可加载目录，避免误选 store 材料文件夹。未代用户上传或提交 Chrome Web Store。
+
+## X / Twitter 短链参考补充 0.4.1（2026-10-21）
+
+- 根据用户提供的 t.co 检查截图，依据 X 官方文档 https://help.x.com/en/using-x/url-shortener 新增 alias-x-shortlink，仅收录完整 host t.co。来源与采集日期保存在 public/brand-aliases.json；不访问具体短链，不检查或继承信任到跳转目标。
+- 已重新生成网站完整域名表、插件参考及 CLI 投影，去重 host 数 6890 → 6891。t.co/Mu6Dm0fzk8 在 CLI 与最终插件包中 knownHostMatch=true、无非 ASCII 或品牌差异提示；new.t.co 和 t.co.attacker.test 不获得完整 host 匹配。
+- 网站／CLI 21 项、插件 26 项通过。更新版本断言为 0.4.1；核对 ZIP 内每个文件与 extension/ 源码一致，保留已有最小权限，无新增网络检查。
+- 插件版本 0.4.1，输出 url-loupe-chrome-0.4.1.zip 及同名可加载目录；原 0.4.0 成品保留。商店填写指南、README 与隐私政策版本同步；未提交 Chrome Web Store。
+- Cloudflare 已部署至 loupe.zhaidewei.com，版本 a449079d-ea2b-4161-94fd-c54f13038338；线上 brand-aliases.json、known-hosts.json、privacy.html 均与本地逐字节一致。

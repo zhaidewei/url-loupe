@@ -1,4 +1,4 @@
-# URL Loupe 网站 v0.4.0
+# URL Loupe 网站 v0.4.1
 
 输入网址，即时检查 host 中的非 ASCII 字符、视觉相似字符与公司域名相似候选。所有字符与品牌比对在浏览器本地完成，不访问输入的目标网站。
 
@@ -100,7 +100,7 @@ Wikidata 结构化数据采用 CC0；Unicode 数据、punycode.js、tldts 和 tl
 
 ## Chrome 商店材料
 
-extension/ 当前商店准备版为 0.4.0，使用与网页共享的字符与品牌比对核心，只突出非 ASCII 字符和实际品牌差异；保留英中切换与最小权限。打包运行 `node scripts/package-extension.mjs`。商店介绍、权限与隐私填写说明及图片在 store/，公开隐私政策为 https://loupe.zhaidewei.com/privacy.html 。插件 ZIP 已在隔离 Chrome 中加载验证；尚未上传或提交商店审核。
+extension/ 当前商店准备版为 0.4.1，使用与网页共享的字符与品牌比对核心，只突出非 ASCII 字符和实际品牌差异；保留英中切换与最小权限。打包运行 `node scripts/package-extension.mjs`。商店介绍、权限与隐私填写说明及图片在 store/，公开隐私政策为 https://loupe.zhaidewei.com/privacy.html 。插件 ZIP 已在隔离 Chrome 中加载验证；尚未上传或提交商店审核。
 
 ## 0.4.0 的源码与 CLI 兼容说明
 

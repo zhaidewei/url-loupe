@@ -1,11 +1,11 @@
 {
   "cruxSnapshot": "202609",
-  "previousUniqueHosts": 1898,
+  "previousUniqueHosts": 1899,
   "cruxOrigins": 5000,
   "cruxUniqueHosts": 4998,
   "overlapWithPrevious": 6,
-  "mergedUniqueHosts": 6890,
-  "mergedDomainListBytes": 122643,
+  "mergedUniqueHosts": 6891,
+  "mergedDomainListBytes": 122650,
   "matching": "exact ASCII/Punycode host only; preserve subdomains; no inherited matches",
   "runtimeFormat": "domain strings only; provenance and license stored separately"
 }

@@ -11,15 +11,15 @@ test('CrUX Top 5000 includes both disjoint buckets and checksum-bound domain-onl
 test('merged runtime references contain exactly the deduplicated old plus CrUX host union',()=>{
  const companies=read('../public/companies.json').companies,aliases=read('../public/brand-aliases.json').brands;
  const old=[...companies,...aliases].flatMap(c=>c.domains).map(h=>new URL('https://'+h).hostname.toLowerCase().replace(/\.$/,''));
- assert.deepEqual(hosts,[...new Set([...old,...crux])].sort());assert.equal(hosts.length,6890);assert.ok(hosts.every(h=>typeof h==='string'&&h===new URL('https://'+h).hostname));
- const known=createIndex([],hosts);for(const h of ['www.google.com','github.com']){const result=compare(HostLens.analyze(h),known);assert.equal(result.knownHostMatch,true);assert.equal(result.matches.length,0);}
- for(const h of ['www.google.com.attacker.test','new.www.google.com'])assert.ok(!compare(HostLens.analyze(h),known).knownHostMatch);
+ assert.deepEqual(hosts,[...new Set([...old,...crux])].sort());assert.equal(hosts.length,6891);assert.ok(hosts.every(h=>typeof h==='string'&&h===new URL('https://'+h).hostname));
+ const known=createIndex([],hosts);for(const h of ['www.google.com','github.com','t.co']){const result=compare(HostLens.analyze(h),known);assert.equal(result.knownHostMatch,true);assert.equal(result.matches.length,0);}
+ for(const h of ['www.google.com.attacker.test','new.www.google.com','t.co.attacker.test','new.t.co'])assert.ok(!compare(HostLens.analyze(h),known).knownHostMatch);
 });
 test('runtime company projection preserves brand comparison without source snapshot payloads',()=>{
  const full=[...read('../public/companies.json').companies,...read('../public/brand-aliases.json').brands];const runtime=read('../data/runtime-references.json');
  assert.equal(runtime.companies.length,full.length);assert.equal(runtime.metadata.companyCount,671);
  const original=createIndex(full,hosts),projected=createIndex(runtime.companies,hosts);
- for(const value of ['Inkd.in','arnazon.test','аррӏе.test','amazon.com.attacker.test','amazon.co.uk','www.google.com','unknown-clean.test']){
+ for(const value of ['Inkd.in','arnazon.test','аррӏе.test','amazon.com.attacker.test','amazon.co.uk','www.google.com','unknown-clean.test','https://t.co/Mu6Dm0fzk8']){
   const data=HostLens.analyze(value);const brief=idx=>{const r=compare(data,idx);return {known:r.knownHostMatch,matches:r.matches.map(m=>[m.company.id,m.host,m.kind]),references:r.references.map(m=>[m.company.id,m.host])};};assert.deepEqual(brief(projected),brief(original),value);
  }
  assert.ok(runtime.companies.every(c=>!('websites'in c)&&!('listingStatements'in c)));

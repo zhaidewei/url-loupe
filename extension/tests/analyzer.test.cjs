@@ -58,11 +58,11 @@ test('IP addresses and emoji parse consistently with Node URL',()=>{
 });
 test('saved-host matching is exact and does not hide original non-ASCII input',()=>{
  const inspect=context.HostLensAnalysis.inspect;
- for(const host of ['chatgpt.com','CHATGPT.COM.','amazon.com','lnkd.in','www.google.com']){const result=inspect('https://'+host+'/path');assert.equal(result.comparison.knownHostMatch,true,host);assert.equal(result.displayTokens.filter(t=>t.similar).length,0,host);}
- for(const host of ['chatgpt.com.attacker.test','chatgpt.test','new.chatgpt.com','new.www.google.com','chatgpt.com@attacker.test'])assert.ok(!inspect('https://'+host).comparison.knownHostMatch,host);
+ for(const host of ['chatgpt.com','CHATGPT.COM.','amazon.com','lnkd.in','t.co','www.google.com']){const result=inspect('https://'+host+'/path');assert.equal(result.comparison.knownHostMatch,true,host);assert.equal(result.displayTokens.filter(t=>t.similar).length,0,host);}
+ for(const host of ['chatgpt.com.attacker.test','chatgpt.test','new.chatgpt.com','new.www.google.com','t.co.attacker.test','new.t.co','chatgpt.com@attacker.test'])assert.ok(!inspect('https://'+host).comparison.knownHostMatch,host);
  const fullwidth=inspect('https://ｃhatgpt.com');assert.equal(fullwidth.comparison.knownHostMatch,true);assert.ok(fullwidth.displayTokens.some(t=>t.char==='ｃ'&&t.nonAscii));
  const cyrillic=inspect('https://сhatgpt.com');assert.ok(!cyrillic.comparison.knownHostMatch);assert.ok(cyrillic.nonAsciiCount>0);
- assert.equal(context.HOST_LENS_KNOWN_HOSTS.length,6890);
+ assert.equal(context.HOST_LENS_KNOWN_HOSTS.length,6891);
 });
 test('shared website explanation highlights only actual brand differences',()=>{
  const inspect=context.HostLensAnalysis.inspect;

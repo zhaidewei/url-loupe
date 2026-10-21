@@ -46,7 +46,7 @@ node scripts/import-companies.mjs --refresh
 
 ## Google CrUX 域名补充（2026-09）
 
-使用 Google Chrome UX Report 的全球 origin 热度分组 `rank <= 5000`。这不是精确排序的“第 1 至 5000 名”。5000 个 origin 提取 URL.hostname 后得到 4998 个不同 host；HTTP/HTTPS 等 origin 差别被移除，子域、www 与非 www 保留为不同 host。与原有 1898 个 host 合并，重复 6 个，最终 6890 个。
+使用 Google Chrome UX Report 的全球 origin 热度分组 `rank <= 5000`。这不是精确排序的“第 1 至 5000 名”。5000 个 origin 提取 URL.hostname 后得到 4998 个不同 host；HTTP/HTTPS 等 origin 差别被移除，子域、www 与非 www 保留为不同 host。与原有 1898 个 host 合并，重复 6 个，初次合并得到 6890 个。2026-10-21 依据 X 官方说明 https://help.x.com/en/using-x/url-shortener 补充 t.co（X / Twitter 短链），当前共 6891 个；不检查或信任短链的最终跳转目标。
 
 获取路径为独立公开导出镜像 crissyfield/crux-dumps，固定提交 5493dd425c47fc7895d7d92df688d70638fb2aa7；不是本项目直接查询 Google BigQuery。来源、固定下载 URL、SHA-256、转换和许可记录在 crux/202609/source.json。必须合并 1000.txt.xz（1000 条）及 5000.txt.xz（后续 4000 条），不能只读取后者。另一个固定提交的 zakird/crux-top-lists 202609 导出交叉核对，5000 个 origin、4998 个 host 集合一致。
 

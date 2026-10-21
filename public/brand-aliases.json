@@ -25,6 +25,18 @@
       "sourceUrl": "https://openai.com/index/chatgpt/",
       "verificationStatus": "manual_brand_reference",
       "retrievedAt": "2026-10-21"
+    },
+    {
+      "id": "alias-x-shortlink",
+      "name": "X / Twitter 短链",
+      "nameEn": "X / Twitter",
+      "domains": [
+        "t.co"
+      ],
+      "sitelinks": 200,
+      "sourceUrl": "https://help.x.com/en/using-x/url-shortener",
+      "verificationStatus": "manual_brand_reference",
+      "retrievedAt": "2026-10-21"
     }
   ]
 }
