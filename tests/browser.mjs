@@ -1,8 +1,8 @@
-import {createRequire} from 'node:module';import {mkdtempSync,rmSync} from 'node:fs';import os from 'node:os';import path from 'node:path';import assert from 'node:assert/strict';import {fileURLToPath} from 'node:url';
+import {createRequire} from 'node:module';import path from 'node:path';import assert from 'node:assert/strict';import {fileURLToPath} from 'node:url';
 import {createApp} from '../server.mjs';
 const require=createRequire(import.meta.url);const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
-const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');const tmp=mkdtempSync(path.join(os.tmpdir(),'host-lens-web-browser-'));
-const {server}=await createApp({dbPath:path.join(tmp,'reports.sqlite')});await new Promise(r=>server.listen(0,'127.0.0.1',r));
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const {server}=await createApp();await new Promise(r=>server.listen(0,'127.0.0.1',r));
 const origin='http://127.0.0.1:'+server.address().port;let browser;
 try{
  browser=await chromium.launch({channel:'chromium',headless:true});const page=await browser.newPage({viewport:{width:1440,height:1100}});const errors=[],requests=[];
@@ -35,4 +35,4 @@ try{
  assert.equal(requests.some(r=>r.url.includes('/api/')),false);
  await page.setViewportSize({width:390,height:844});await page.evaluate(()=>window.scrollTo(0,0));assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,JSON.stringify(await page.evaluate(()=>[...document.querySelectorAll('body *')].filter(e=>e.getBoundingClientRect().right>innerWidth+1).map(e=>({tag:e.tagName,id:e.id,cls:e.className,w:e.getBoundingClientRect().width})))));await page.screenshot({path:path.join(root,'..','host-lens-web-mobile.png'),fullPage:true});
  assert.deepEqual(errors,[]);console.log('PASS: desktop/mobile; real reference dataset; instant non-ASCII and brand checks; source lookup; no target-site requests; no reporting UI or API requests; no page errors.');
-}finally{await browser?.close();await new Promise(r=>server.close(r));rmSync(tmp,{recursive:true,force:true});}
+}finally{await browser?.close();await new Promise(r=>server.close(r));}

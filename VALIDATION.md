@@ -220,3 +220,9 @@ Node.js 22.23.1；`npm test`：14/14 通过。
 - 验证：网站／CLI 21 项、插件 26 项、归档原型 2 项通过；网站与最终 ZIP 的隔离 Chromium 回归通过（含原生工具栏 POPUP、真正跳转目标的本地拦截验证、IME、全部非 ASCII 示例、zhaidewei.com 无泛化高亮和 rn/m 差异联动）。系统原生菜单的物理鼠标点击仍未自动化，同一处理函数及原生弹窗已验证。
 - 0.4.0 插件 ZIP 175331 字节；加入品牌参考与 PSL 后比 0.3.8 大，运行时不联网。核对 ZIP 中每个文件与当前源码一致，manifest 仅 activeTab/contextMenus，随包补充 tldts 两份许可证。4 张 1280×800 RGB 无 alpha 真实截图与商店材料已生成，另提供可直接加载的独立解压目录。
 - 源码与材料待同步，线上待回读；未代用户上传或提交 Chrome Web Store。
+
+### 0.4.0 发布回读
+
+- 代码提交 cd6e302 已推送个人 GitHub；Cloudflare 部署版本 83b6ecfa-7c41-45bf-8365-da1a67b67c19，目标 loupe.zhaidewei.com。默认浏览器回归的旧临时数据库参数及临时目录初始化也已移除，不再保留无使用者的测试设置。
+- 正式 HTTPS 网站、英中、6890 个完整 host、LinkedIn i/l、Amazon rn/m、非 ASCII、手机布局、来源与隐私页回读通过，无页面错误、目标网站或 API 请求。/demo 线上英中、链接留页及新插件模型验证通过；隐私页确认 0.4.0、离线品牌参考和最小权限披露。
+- 四张真实新截图和材料 ZIP 已完成，上传插件 ZIP 与源码逐项比对通过。已准备 outputs/url-loupe-chrome-0.4.0 独立可加载目录，避免误选 store 材料文件夹。未代用户上传或提交 Chrome Web Store。
