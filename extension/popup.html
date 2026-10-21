@@ -7,12 +7,12 @@
 <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-<header><img src="icons/icon-48.png" alt="" width="32" height="32"><button id="language" type="button" aria-label="Switch language">中文</button><h1>URL Loupe</h1><p>看清 host 中的每个字符</p></header>
+<header><img src="icons/icon-48.png" alt="" width="32" height="32"><button id="language" type="button" aria-label="Switch language">中文</button><h1>URL Loupe</h1></header>
 <div class="input-group"><label for="url">网址或域名</label><div class="input-row"><input id="url" type="text" placeholder="粘贴网址，例如 https://lnkd.in" autocomplete="off" spellcheck="false"></div></div>
-<div class="examples"><span>试试看</span><button data-example="https://Inkd.in/enHTuknJ">I / l 混淆</button><button data-example="https://аррӏе.com">西里尔字母</button><button data-example="https://例子.测试">中文域名</button></div>
-<p id="error" role="alert"></p>
+<details class="examples-panel"><summary id="examples-label">Examples</summary><div class="examples"><span>试试看</span><button data-example="https://Inkd.in/enHTuknJ">I / l 混淆</button><button data-example="https://аррӏе.com">西里尔字母</button><button data-example="https://例子.测试">中文域名</button></div>
+</details><p id="error" role="alert"></p>
 <div id="result" aria-live="polite"></div>
-<footer><p id="usage"></p><p><a href="https://loupe.zhaidewei.com/privacy.html" target="_blank" rel="noopener noreferrer" id="privacy">Privacy</a> · <a href="https://github.com/zhaidewei/url-loupe" target="_blank" rel="noopener noreferrer">GitHub</a></p></footer>
+<footer><details class="help"><summary id="help-label">Help</summary><p id="usage"></p></details><p><a href="https://loupe.zhaidewei.com/privacy.html" target="_blank" rel="noopener noreferrer" id="privacy">Privacy</a> · <a href="https://github.com/zhaidewei/url-loupe" target="_blank" rel="noopener noreferrer">GitHub</a></p></footer>
 <script src="vendor/punycode.js"></script><script src="vendor/confusables.js"></script><script src="known-hosts.js"></script><script src="analyzer.js"></script><script src="i18n.js"></script><script src="render.js"></script><script src="popup.js"></script>
 </body>
 </html>

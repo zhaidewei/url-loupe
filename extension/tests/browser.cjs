@@ -23,9 +23,9 @@ const fs=require('node:fs');const path=require('node:path');const http=require('
   await page.keyboard.press('Escape');
   await page.locator('#known').hover();await page.waitForTimeout(400);assert.equal(await page.locator('host-lens-inspector').count(),0);
   const popup=await context.newPage();await popup.goto(`chrome-extension://${id}/popup.html`);
-  await popup.locator('#url').fill('https://chatgpt.com');assert.equal(await popup.locator('#result .similar').count(),0);assert.equal(await popup.locator('#result .nonascii').count(),0);assert.ok((await popup.locator('#result .card').textContent()).includes('Matches a saved hostname'));
-  await popup.locator('#url').fill('https://www.google.com');assert.equal(await popup.locator('#result .similar').count(),0);assert.ok((await popup.locator('#result .card').textContent()).includes('Matches a saved hostname'));
-  await popup.locator('button[data-example="https://аррӏе.com"]').click();
+  await popup.locator('#url').fill('https://chatgpt.com');assert.equal(await popup.locator('#result .similar').count(),0);assert.equal(await popup.locator('#result .nonascii').count(),0);assert.ok((await popup.locator('#result .card').textContent()).includes('Saved hostname matched'));assert.equal(await popup.locator('#result .check.pass').count(),3);assert.equal(await popup.locator('#result .check.attention').count(),0);assert.equal(await popup.locator('#result details').getAttribute('open'),null);assert.equal(await popup.locator('#result .encoded').isVisible(),false);
+  await popup.locator('#url').fill('https://www.google.com');assert.equal(await popup.locator('#result .similar').count(),0);assert.ok((await popup.locator('#result .card').textContent()).includes('Saved hostname matched'));
+  await popup.locator('.examples-panel').evaluate(el=>el.open=true);await popup.locator('button[data-example="https://аррӏе.com"]').click();
   assert.equal(await popup.locator('#result .nonascii').count(),5);
   assert.equal(await popup.locator('#result .warning[role=alert]').count(),1);
   assert.equal(await popup.locator('#result .nonascii.similar').count(),5);
@@ -35,7 +35,7 @@ const fs=require('node:fs');const path=require('node:path');const http=require('
   assert.equal(await popup.locator('#result .nonascii').count(),0);
   assert.equal(await popup.locator('#result .warning').count(),0);
   assert.ok(await popup.locator('#result .similar').count()>0);
-  await popup.locator('#url').fill('https://safe.test/中文?x=а');
+  await popup.locator('#url').fill('https://safe.test/中文?x=а');assert.equal(await popup.locator('#result .check.neutral').count(),1);
   assert.equal(await popup.locator('#result .nonascii').count(),0);
   await popup.locator('#url').fill('javascript:alert(1)');
   assert.ok(await popup.locator('#error').textContent());assert.equal(await popup.locator('#result .card').count(),0);
