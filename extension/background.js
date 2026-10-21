@@ -4,10 +4,21 @@ function updateSuggestions(text,suggest){
   chrome.omnibox.setDefaultSuggestion({description:result.description});
   if(suggest)suggest(result.suggestions);
 }
+const reviewTargets=new Map();
+chrome.runtime.onMessage.addListener((message,sender,reply)=>{
+  if(message?.type!=='review-target' || !sender.url?.startsWith(chrome.runtime.getURL('popup.html')))return;
+  const target=reviewTargets.get(message.token);reviewTargets.delete(message.token);reply({target:target || null});
+});
 async function openHostReview(text,disposition){
   const result=HostLensOmnibox.describe(text);
-  const url=chrome.runtime.getURL('popup.html')+(result.host ? '#host='+encodeURIComponent(result.host) : '#invalid=1');
-  // Only the extracted host reaches the extension page, never passwords or URL paths.
+  const token=result.host ? crypto.randomUUID() : '';
+  if(token){
+    // Short-lived handoff: full URLs stay in memory, outside extension URLs/history.
+    if(reviewTargets.size>=100)reviewTargets.delete(reviewTargets.keys().next().value);
+    reviewTargets.set(token,String(text));
+  }
+  const url=chrome.runtime.getURL('popup.html')+(result.host ? '#host='+encodeURIComponent(result.host)+'&review='+token : '#invalid=1');
+  // The address contains only the host and an opaque handoff token.
   if(disposition==='newBackgroundTab')await chrome.tabs.create({url,active:false});
   else if(disposition==='newForegroundTab')await chrome.tabs.create({url,active:true});
   else await chrome.tabs.update({url});

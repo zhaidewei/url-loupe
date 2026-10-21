@@ -10,7 +10,7 @@ A closer look at every URL.
 URL Loupe makes hostname characters easier to inspect. It highlights all non-ASCII characters and offers visual character hints, including ASCII lookalikes such as I/l and character combinations such as rn/m.
 
 Four ways to inspect:
-• Right-click a link, selected URL or page and choose “🔍 Inspect with URL Loupe”. A local review tab opens; the inspected website is not visited. For links, the actual destination is checked even if the visible text differs.
+• Right-click a link, selected URL or page and choose “🔍 Inspect with URL Loupe”. A local review tab opens; the inspected website is not visited automatically. For links, the actual destination is checked even if the visible text differs.
 • Open the toolbar popup to inspect the current tab URL or paste a URL for instant results.
 • Hover or keyboard-focus a webpage link to view its hostname without opening it.
 • Type “host”, press Tab in Chrome’s address bar, and enter a URL. Press Enter to open a local, highlighted review page instead of visiting the destination.
@@ -22,7 +22,7 @@ What you see:
 • The original hostname when normalization changes it.
 
 Private by design:
-• Inspection runs locally. The extension does not visit inspected websites or send inspection results to a server.
+• Inspection runs locally. The extension does not automatically visit inspected websites or send inspection results to a server.
 • No account, ads, analytics or stored browsing history.
 • Bundled code and Unicode mappings; no remote executable code.
 • English and Simplified Chinese. The popup includes a language toggle.
@@ -39,3 +39,5 @@ Saved hostname matching: An exact match to a bundled reference hostname hides ge
 The bundled reference set contains 6,890 unique hostnames, merging existing records with hostname-only data from Google CrUX September 2026 Top 5,000 origin buckets. CrUX data is attributed under CC BY 4.0. This is an independent project, not a Google product or endorsement.
 
 The compact result shows the hostname and check statuses. Passing checks are green; explanations appear when character concerns are found. ASCII/Punycode, code points and usage help are available in expandable details. A hostname absent from the reference set is shown neutrally.
+
+After inspection, choose “Open original URL” to visit the destination in a new tab. Paths, query parameters and fragments are preserved; embedded credentials are removed. The original URL is passed once in memory and is not stored in the review address. Reloading the review page can discard the original link.

@@ -2,8 +2,8 @@ const {test}=require('node:test');const assert=require('node:assert/strict');con
 const root=path.join(__dirname,'..');
 function setup(){
  const calls=[];const listeners={};const event=name=>({addListener:fn=>listeners[name]=fn});
- const context=vm.createContext({URL,console,chrome:{
-  runtime:{getURL:file=>'chrome-extension://test/'+file,onInstalled:event('installed')},
+ const context=vm.createContext({URL,console,crypto:require('node:crypto').webcrypto,chrome:{
+  runtime:{getURL:file=>'chrome-extension://test/'+file,onInstalled:event('installed'),onMessage:event('message')},
   contextMenus:{removeAll:fn=>{calls.push(['removeAll']);fn();},create:(value,fn)=>{calls.push(['menu',value]);fn();},onClicked:event('clicked')},
   tabs:{update:async value=>calls.push(['update',value]),create:async value=>calls.push(['create',value])},
   omnibox:{setDefaultSuggestion:value=>calls.push(['default',value]),onInputStarted:event('started'),onInputChanged:event('changed'),onInputEntered:event('entered')}
@@ -36,7 +36,7 @@ test('enter opens local review; respects all three dispositions',async()=>{
  const {context,calls}=setup();
  for(const disposition of ['currentTab','newForegroundTab','newBackgroundTab'])await context.openHostReview('https://user:secret@Inkd.test/private',disposition);
  assert.equal(calls[0][0],'update');assert.equal(calls[1][1].active,true);assert.equal(calls[2][1].active,false);
- for(const [,args]of calls){assert.equal(args.url,'chrome-extension://test/popup.html#host=Inkd.test');assert.ok(!args.url.includes('secret'));}
+ for(const [,args]of calls){assert.equal(args.url.split('&review=')[0],'chrome-extension://test/popup.html#host=Inkd.test');assert.ok(!args.url.includes('secret'));}
 });
 test('invalid and empty input never navigate to the supplied address',async()=>{
  const {context,calls}=setup();
@@ -82,7 +82,7 @@ test('right-click checks actual href, selected URL or current page in a local ne
   {pageUrl:'https://chatgpt.com/path'},
   {}
  ])await context.inspectContext({menuItemId:'url-loupe-inspect',...info},{url:'https://fallback.test/path'});
- assert.deepEqual(calls.map(c=>c[1].url),[
+ assert.deepEqual(calls.map(c=>c[1].url.split('&review=')[0]),[
   'chrome-extension://test/popup.html#host=Inkd.test',
   'chrome-extension://test/popup.html#host='+encodeURIComponent('例子.test'),
   'chrome-extension://test/popup.html#host=chatgpt.com',
@@ -96,4 +96,14 @@ test('right-click invalid selection and unsafe schemes never open target or fall
   await context.inspectContext({menuItemId:'url-loupe-inspect',pageUrl:'https://chatgpt.com',...info},{});
  await context.inspectContext({menuItemId:'other',pageUrl:'https://chatgpt.com'},{});
  assert.equal(calls.length,3);assert.ok(calls.every(([,args])=>args.url.endsWith('#invalid=1')));
+});
+test('full URL handoff stays in memory, is extension-only and consumed once',async()=>{
+ const {context,listeners,calls}=setup();const target='https://example.test/a?x=1#section';
+ await context.openHostReview(target,'newForegroundTab');
+ const token=new URL(calls[0][1].url).hash.split('&review=')[1];assert.ok(token);
+ assert.ok(!calls[0][1].url.includes('x=1'));
+ let result;const reply=value=>result=value;
+ listeners.message({type:'review-target',token},{url:'https://evil.test'},reply);assert.equal(result,undefined);
+ listeners.message({type:'review-target',token},{url:'chrome-extension://test/popup.html#host=example.test'},reply);assert.equal(result.target,target);
+ listeners.message({type:'review-target',token},{url:'chrome-extension://test/popup.html'},reply);assert.equal(result.target,null);
 });
