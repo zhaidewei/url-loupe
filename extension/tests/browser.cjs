@@ -79,7 +79,19 @@ const fs=require('node:fs');const path=require('node:path');const http=require('
   assert.ok(!review.url().includes('secret') && !review.url().includes('hidden'));
   assert.equal(await review.locator('#result .nonascii').count(),1);
   await review.screenshot({path:path.join(artifacts,'host-lens-omnibox-review.png')});
+  const invalidPromise=context.waitForEvent('page');
   await worker.evaluate(()=>openHostReview('javascript:alert(1)','newForegroundTab'));
+  const invalid=await invalidPromise;await invalid.waitForLoadState();
+  await worker.evaluate(()=>new Promise((resolve,reject)=>chrome.contextMenus.update('url-loupe-inspect',{},()=>chrome.runtime.lastError ? reject(new Error(chrome.runtime.lastError.message)) : resolve())));
+  const menuReviewPromise=context.waitForEvent('page');
+  await worker.evaluate(()=>inspectContext({menuItemId:'url-loupe-inspect',linkUrl:'https://user:secret@аpple.test/private',selectionText:'https://chatgpt.com',pageUrl:'https://page.test'},{}));
+  const menuReview=await menuReviewPromise;await menuReview.waitForLoadState();
+  await menuReview.locator('#result .nonascii').first().waitFor();
+  assert.equal(await menuReview.locator('#url').inputValue(),'аpple.test');
+  assert.equal(await menuReview.locator('#result .nonascii').count(),1);
+  assert.ok(!menuReview.url().includes('secret'));assert.ok(await menuReview.locator('header img').isVisible());
+  assert.ok((await worker.evaluate(()=>chrome.contextMenus.onClicked.hasListeners())));
+  console.log('PASS: context-menu handler opens local review for actual link destination with magnifier header; native menu click not automated.');
   console.log('PASS: omnibox worker loads; suggestion markup accepted by Chrome; Enter handler opens local review with Unicode highlighter; credentials and path omitted.');
   console.log('PASS: MV3 extension loads; popup highlights Cyrillic and ASCII lookalikes; paths excluded; invalid URL error; hover/focus/dynamic anchors; Esc dismisses; link text and href unchanged.');
  }finally{await context?.close();server.close();fs.rmSync(profile,{recursive:true,force:true});}

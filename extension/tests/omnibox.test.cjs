@@ -3,7 +3,8 @@ const root=path.join(__dirname,'..');
 function setup(){
  const calls=[];const listeners={};const event=name=>({addListener:fn=>listeners[name]=fn});
  const context=vm.createContext({URL,console,chrome:{
-  runtime:{getURL:file=>'chrome-extension://test/'+file},
+  runtime:{getURL:file=>'chrome-extension://test/'+file,onInstalled:event('installed')},
+  contextMenus:{removeAll:fn=>{calls.push(['removeAll']);fn();},create:(value,fn)=>{calls.push(['menu',value]);fn();},onClicked:event('clicked')},
   tabs:{update:async value=>calls.push(['update',value]),create:async value=>calls.push(['create',value])},
   omnibox:{setDefaultSuggestion:value=>calls.push(['default',value]),onInputStarted:event('started'),onInputChanged:event('changed'),onInputEntered:event('entered')}
  }});
@@ -65,4 +66,34 @@ test('uppercase ACE input still warns about decoded non-ASCII characters',()=>{
  const result=context.HostLensOmnibox.describe('https://'+host);
  assert.ok(result.description.startsWith('⚠ 含非 ASCII 字符'));
  assert.ok(result.description.includes('<match>例</match>'));
+});
+test('install/update creates one magnifier menu for links, selections and pages',()=>{
+ const {listeners,calls}=setup();listeners.installed();listeners.installed();
+ assert.deepEqual(calls.map(c=>c[0]),['removeAll','menu','removeAll','menu']);
+ const menu=calls[1][1];assert.equal(menu.id,'url-loupe-inspect');assert.ok(menu.title.startsWith('🔍'));
+ assert.deepEqual(Array.from(menu.contexts),['link','selection','page']);
+ assert.deepEqual(Array.from(menu.documentUrlPatterns),['http://*/*','https://*/*']);
+});
+test('right-click checks actual href, selected URL or current page in a local new tab',async()=>{
+ const {context,calls}=setup();
+ for(const info of [
+  {linkUrl:'https://user:secret@Inkd.test/private',selectionText:'https://lnkd.in',pageUrl:'https://page.test'},
+  {selectionText:'https://例子.test/path',pageUrl:'https://page.test'},
+  {pageUrl:'https://chatgpt.com/path'},
+  {}
+ ])await context.inspectContext({menuItemId:'url-loupe-inspect',...info},{url:'https://fallback.test/path'});
+ assert.deepEqual(calls.map(c=>c[1].url),[
+  'chrome-extension://test/popup.html#host=Inkd.test',
+  'chrome-extension://test/popup.html#host='+encodeURIComponent('例子.test'),
+  'chrome-extension://test/popup.html#host=chatgpt.com',
+  'chrome-extension://test/popup.html#host=fallback.test'
+ ]);
+ assert.ok(calls.every(([kind,args])=>kind==='create' && args.active && !args.url.includes('secret')));
+});
+test('right-click invalid selection and unsafe schemes never open target or fall back to page',async()=>{
+ const {context,calls}=setup();
+ for(const info of [{selectionText:'not a URL'},{linkUrl:'javascript:alert(1)'},{selectionText:''}])
+  await context.inspectContext({menuItemId:'url-loupe-inspect',pageUrl:'https://chatgpt.com',...info},{});
+ await context.inspectContext({menuItemId:'other',pageUrl:'https://chatgpt.com'},{});
+ assert.equal(calls.length,3);assert.ok(calls.every(([,args])=>args.url.endsWith('#invalid=1')));
 });

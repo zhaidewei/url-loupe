@@ -3,7 +3,7 @@
     "message": "URL Loupe · URL 放大镜"
   },
   "extensionDescription": {
-    "message": "本地检查域名中的非 ASCII 与视觉相似字符，支持网页链接悬停、工具栏和 host + Tab 地址栏入口。"
+    "message": "本地检查域名中的非 ASCII 与视觉相似字符，支持右键链接检查、工具栏、链接悬停和 host + Tab。"
   },
   "actionTitle": {
     "message": "检查域名字符"
