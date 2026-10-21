@@ -10,7 +10,7 @@ A closer look at every URL.
 URL Loupe makes hostname characters easier to inspect. It highlights all non-ASCII characters and offers visual character hints, including ASCII lookalikes such as I/l and character combinations such as rn/m.
 
 Four ways to inspect:
-• Right-click a link, selected URL or page and choose “🔍 Inspect with URL Loupe”. The toolbar popup opens while the current webpage stays active; the inspected website is not visited automatically. For links, the actual destination is checked even if the visible text differs.
+• Right-click a link, selected URL or page and choose “Inspect with URL Loupe”. The toolbar popup opens while the current webpage stays active; the inspected website is not visited automatically. For links, the actual destination is checked even if the visible text differs.
 • Open the toolbar popup to inspect the current tab URL or paste a URL for instant results.
 • Hover or keyboard-focus a webpage link to view its hostname without opening it.
 • Type “host”, press Tab in Chrome’s address bar, and enter a URL. Press Enter to open a local, highlighted review page instead of visiting the destination.

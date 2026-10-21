@@ -43,7 +43,7 @@ function registerInspectionMenu(){
     if(chrome.runtime.lastError){console.error('无法创建右键检查入口。');return;}
     chrome.contextMenus.create({
       id:INSPECT_MENU_ID,
-      title:HostLensI18n.lang==='zh' ? '🔍 使用 URL Loupe 检查' : '🔍 Inspect with URL Loupe',
+      title:HostLensI18n.lang==='zh' ? '使用 URL Loupe 检查' : 'Inspect with URL Loupe',
       contexts:['link','selection','page'],
       documentUrlPatterns:['http://*/*','https://*/*']
     },()=>{if(chrome.runtime.lastError)console.error('无法创建右键检查入口。');});

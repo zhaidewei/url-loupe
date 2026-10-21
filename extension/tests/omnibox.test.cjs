@@ -71,7 +71,7 @@ test('uppercase ACE input still warns about decoded non-ASCII characters',()=>{
 test('install/update creates one magnifier menu for links, selections and pages',()=>{
  const {listeners,calls}=setup();listeners.installed();listeners.installed();
  assert.deepEqual(calls.map(c=>c[0]),['removeAll','menu','removeAll','menu']);
- const menu=calls[1][1];assert.equal(menu.id,'url-loupe-inspect');assert.ok(menu.title.startsWith('🔍'));
+ const menu=calls[1][1];assert.equal(menu.id,'url-loupe-inspect');assert.ok(menu.title.includes('URL Loupe'));assert.ok(!menu.title.includes('🔍'));
  assert.deepEqual(Array.from(menu.contexts),['link','selection','page']);
  assert.deepEqual(Array.from(menu.documentUrlPatterns),['http://*/*','https://*/*']);
 });
