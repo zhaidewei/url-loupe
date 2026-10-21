@@ -24,6 +24,7 @@ const fs=require('node:fs');const path=require('node:path');const http=require('
   await page.locator('#known').hover();await page.waitForTimeout(400);assert.equal(await page.locator('host-lens-inspector').count(),0);
   const popup=await context.newPage();await popup.goto(`chrome-extension://${id}/popup.html`);
   await popup.locator('#url').fill('https://chatgpt.com');assert.equal(await popup.locator('#result .similar').count(),0);assert.equal(await popup.locator('#result .nonascii').count(),0);assert.ok((await popup.locator('#result .card').textContent()).includes('Matches a saved hostname'));
+  await popup.locator('#url').fill('https://www.google.com');assert.equal(await popup.locator('#result .similar').count(),0);assert.ok((await popup.locator('#result .card').textContent()).includes('Matches a saved hostname'));
   await popup.locator('button[data-example="https://аррӏе.com"]').click();
   assert.equal(await popup.locator('#result .nonascii').count(),5);
   assert.equal(await popup.locator('#result .warning[role=alert]').count(),1);

@@ -25,3 +25,5 @@ URL Loupe 帮你逐字符核对域名，标记所有非 ASCII 字符，并提供
 隐私政策：https://loupe.zhaidewei.com/privacy.html
 
 已知域名匹配：与随包参考库中的完整 host 精确一致时，隐藏普通 ASCII 相似字符提示。此规则不构成安全白名单，非 ASCII 输入仍会标记；不会自动放行未收录子域或相似拼写。
+
+随包参考表包含 6,890 个唯一 host，由现有记录与 Google CrUX 2026-09 Top 5000 origin 分组提取的域名合并。CrUX 数据依 CC BY 4.0 保留署名。本项目独立维护，不代表 Google 产品、认可或安全认证。

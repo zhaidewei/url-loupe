@@ -35,7 +35,7 @@ function renderExplanation(data){
  const comparison=index?HostLensEngine.compare(data,index):{matches:[],references:[]};
  const model=HostLensEngine.buildExplanation(data,comparison);
  tag('character-state',data.nonAsciiCount?'含非 ASCII':'未发现非 ASCII',data.nonAsciiCount?'danger':'neutral');
- tag('brand-state',!index?(loadFailed?'参考库不可用':'参考库载入中'):comparison.references.length?'参考记录一致':comparison.matches.length?'发现相似候选':'未找到品牌候选',comparison.matches.length?'warn':'neutral');
+ tag('brand-state',!index?(loadFailed?'参考库不可用':'参考库载入中'):(comparison.knownHostMatch||comparison.references.length)?'参考记录一致':comparison.matches.length?'发现相似候选':'未找到品牌候选',comparison.matches.length?'warn':'neutral');
  const line=node('div',undefined,'explained-url');
  const source=$('url').value.trim();const explicit=source.match(/^https?:\/\//i);const url=new URL(explicit?source:'https://'+source);
  const prefix=node('span',url.protocol+'//'+(data.hasCredentials?'[身份信息]@':''),'url-context');
@@ -60,7 +60,7 @@ function renderExplanation(data){
   if(annotation.match)card.append(node('div',annotation.match.domain,'match-domain'),sourceLink(annotation.match.company));
   const select=()=>setActive(annotation.id);card.addEventListener('pointerenter',select);card.addEventListener('focus',select);notes.append(card);
  }
- if(!model.annotations.length)notes.append(node('p',!index?'参考库尚未就绪，品牌比对暂不可用。':'未发现非 ASCII 字符，也未找到当前参考库中的品牌相似候选。这不代表网站安全。','no-match'));
+ if(!model.annotations.length)notes.append(node('p',comparison.knownHostMatch?'与已保存的完整域名一致；这不代表网站安全。':!index?'参考库尚未就绪，品牌比对暂不可用。':'未发现非 ASCII 字符，也未找到当前参考库中的品牌相似候选。这不代表网站安全。','no-match'));
  if(comparison.matches.length>1){const more=node('details',undefined,'more-candidates');more.append(node('summary','其他相似候选（'+(comparison.matches.length-1)+'）'));for(const match of comparison.matches.slice(1))more.append(node('p',(match.company.nameEn||match.company.name)+' · '+match.domain+' · '+match.reason));notes.append(more);}
  const details=node('details',undefined,'raw-details');details.append(node('summary','查看实际域名与解码信息'),node('p','浏览器实际使用的 ASCII / Punycode host','small'),node('div',data.asciiHost,'mono-box'));
  if(model.displayHost!==data.unicodeHost)details.append(node('p','规范化后的 Unicode host','small'),node('div',data.unicodeHost,'mono-box'));
@@ -91,8 +91,8 @@ function companyList(){
 }
 $('company-search').addEventListener('input',companyList);
 (async()=>{
- try{const [response,aliases]=await Promise.all([fetch('/companies.json'),fetch('/brand-aliases.json')]);if(!response.ok||!aliases.ok)throw Error('dataset');dataset=await response.json();const extra=await aliases.json();index=HostLensEngine.createIndex([...dataset.companies,...extra.brands]);
- $('dataset-status').textContent=`${dataset.metadata.companyCount} 家公司参考库已就绪`;$('company-count').textContent=dataset.metadata.companyCount.toLocaleString();$('domain-count').textContent=dataset.metadata.domainCount.toLocaleString();$('coverage-notes').textContent='采集日期：'+dataset.metadata.retrievedAt.slice(0,10)+'。'+dataset.metadata.coverageNotes+' 未逐家公司独立验证当前上市状态或域名所有权。另有 '+extra.brands.length+' 条人工补充品牌参考。';companyList();if($('url').value)update();
+ try{const [response,aliases,hostsResponse]=await Promise.all([fetch('/companies.json'),fetch('/brand-aliases.json'),fetch('/known-hosts.json')]);if(!response.ok||!aliases.ok||!hostsResponse.ok)throw Error('dataset');dataset=await response.json();const extra=await aliases.json();const knownHosts=await hostsResponse.json();index=HostLensEngine.createIndex([...dataset.companies,...extra.brands],knownHosts);
+ $('dataset-status').textContent=`${dataset.metadata.companyCount} 家公司参考库已就绪`;$('company-count').textContent=dataset.metadata.companyCount.toLocaleString();$('domain-count').textContent=knownHosts.length.toLocaleString();$('coverage-notes').textContent='采集日期：'+dataset.metadata.retrievedAt.slice(0,10)+'。'+dataset.metadata.coverageNotes+' 未逐家公司独立验证当前上市状态或域名所有权。另有 '+extra.brands.length+' 条人工补充品牌参考。另合并 Google CrUX 2026-09 Top 5000 分组，按完整 host 去重。';companyList();if($('url').value)update();
  }catch{loadFailed=true;$('dataset-status').textContent='参考库载入失败';if(current)renderExplanation(current);}
 })();
 

@@ -43,3 +43,15 @@ node scripts/import-companies.mjs --refresh
 - [Wikidata 数据授权（结构化数据 CC0）](https://www.wikidata.org/wiki/Wikidata:Licensing)
 
 每家公司还保留 `sourceUrl`、QID、采集时间，网址保留具体 P856 来源和声明 ID。`verificationStatus: wikidata_record` 表示社区来源记录，界面应始终保留这一来源边界。
+
+## Google CrUX 域名补充（2026-09）
+
+使用 Google Chrome UX Report 的全球 origin 热度分组 `rank <= 5000`。这不是精确排序的“第 1 至 5000 名”。5000 个 origin 提取 URL.hostname 后得到 4998 个不同 host；HTTP/HTTPS 等 origin 差别被移除，子域、www 与非 www 保留为不同 host。与原有 1898 个 host 合并，重复 6 个，最终 6890 个。
+
+获取路径为独立公开导出镜像 crissyfield/crux-dumps，固定提交 5493dd425c47fc7895d7d92df688d70638fb2aa7；不是本项目直接查询 Google BigQuery。来源、固定下载 URL、SHA-256、转换和许可记录在 crux/202609/source.json。必须合并 1000.txt.xz（1000 条）及 5000.txt.xz（后续 4000 条），不能只读取后者。另一个固定提交的 zakird/crux-top-lists 202609 导出交叉核对，5000 个 origin、4998 个 host 集合一致。
+
+CrUX 数据采用 Google 明示的 CC BY 4.0，署名、原始链接、修改说明和输入校验值随插件保存在 vendor/CRUX-NOTICE.txt；网站在 public/vendor/ 同步公开。代码的 MIT 许可不覆盖 CrUX 数据。Wikidata 原有数据仍为 CC0，人工品牌参考保留来源。没有把第三方镜像称为 Google 官方托管服务。
+
+`node scripts/import-crux.mjs` 校验本地快照并重新提取（需要 xz 解压工具）；`--refresh` 重新下载同一固定提交，校验值变化即失败。`node scripts/build-known-hosts.mjs` 从原有记录和已提取 CrUX host 生成排序去重的 public/known-hosts.json 与 extension/known-hosts.js。普通构建无需 xz 或联网。
+
+运行时合并表只含域名字符串，没有名称、排名、来源或日期字段。它仅用于完整 host 精确匹配时隐藏普通 ASCII 字符提示，不扩大至未收录子域、不取消非 ASCII 提示、不新增 CrUX 品牌模糊比对，也不认证网站安全。

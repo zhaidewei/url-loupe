@@ -34,3 +34,5 @@ Source and support: https://github.com/zhaidewei/url-loupe
 Privacy: https://loupe.zhaidewei.com/privacy.html
 
 Saved hostname matching: An exact match to a bundled reference hostname hides generic ASCII lookalike hints. This is not a safety allowlist. Non-ASCII input is still highlighted. Subdomains and similar spellings are not automatically exempted.
+
+The bundled reference set contains 6,890 unique hostnames, merging existing records with hostname-only data from Google CrUX September 2026 Top 5,000 origin buckets. CrUX data is attributed under CC BY 4.0. This is an independent project, not a Google product or endorsement.

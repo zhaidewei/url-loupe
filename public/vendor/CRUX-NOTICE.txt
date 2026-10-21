@@ -1,0 +1,15 @@
+Google Chrome UX Report (CrUX) — September 2026 global origin popularity buckets <= 5000.
+Copyright / attribution: Google.
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+Official dataset: https://developer.chrome.com/docs/crux/bigquery
+Official data license: https://developer.chrome.com/docs/crux/methodology#license
+Downloaded through an independent export mirror, not directly from Google BigQuery:
+https://github.com/crissyfield/crux-dumps/tree/5493dd425c47fc7895d7d92df688d70638fb2aa7/2026/09
+Modifications by URL Loupe: retain URL.hostname only, lowercase ASCII/Punycode normalization, remove a trailing dot, deduplicate exact hosts, merge with existing reference hosts.
+CrUX component: 5000 origins → 4998 unique hostnames.
+The CrUX data component retains CC BY 4.0; it is not relicensed as MIT. Other data and code retain their respective licenses.
+Neither popularity nor a reference match establishes safety. No Google endorsement is implied.
+Mirror input SHA-256 checksums:
+1000.txt.xz: 67d1b037fa67c9ac89375855e2cd22643f4b89bf25a5c71edf4b934c590033f9
+5000.txt.xz: e0d32779922c88cc0fa674e9edf5ecc68d32f93257664b474e26056220f1647d

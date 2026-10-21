@@ -1,6 +1,6 @@
 # URL Loupe · URL 放大镜
 
-Chrome Manifest V3 扩展 v0.3.1，本地检查网址 host 中的非 ASCII 字符和视觉相似字符。
+Chrome Manifest V3 扩展 v0.3.2，本地检查网址 host 中的非 ASCII 字符和视觉相似字符。
 
 ## 安装
 
@@ -65,8 +65,12 @@ Chrome 扩展不能修改浏览器原生地址栏中的字符颜色。高亮出�
 
 Unicode 数据和 punycode.js 均随扩展打包，运行时无需下载。
 
-## 商店版本 0.3.1
+## 商店版本 0.3.2
 
 新增放大镜 PNG 图标、英文与简体中文本地化、面板语言切换及公开隐私政策链接。初始语言跟随 Chrome 界面语言（中文或英文），面板切换只影响当前面板，不持久化。网页链接提示与地址栏建议跟随 Chrome 界面语言。
 
 商店上传包由仓库根目录 scripts/package-extension.mjs 生成，manifest.json 位于 ZIP 根目录；不打包测试、源码文档和网站数据。隐私政策：https://loupe.zhaidewei.com/privacy.html 。目前仅准备上传材料，未提交商店审核。
+
+## 合并参考表 0.3.2
+
+Google CrUX 2026-09 的 Top 5000 origin 分组，提取去重后 4998 个 host，与原有 1898 条合并为 6890 条。运行时 known-hosts.js 只存域名字符串，精确匹配后隐藏普通 ASCII 提示，非 ASCII 不变；不新增针对 CrUX 域名的品牌模糊比较。Google 数据采用 CC BY 4.0，来源、快照与修改说明见 vendor/CRUX-NOTICE.txt 和仓库 data/crux/。

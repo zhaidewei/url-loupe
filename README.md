@@ -35,7 +35,7 @@ Exit codes: **0** completed; **1** findings when --fail-on-findings is enabled; 
 
 ## References and limits
 
-671 companies and 1,896 reference hosts from a Wikidata snapshot dated 2026-10-20, plus a manually sourced LinkedIn short-domain alias. Sources and filtering rules: [data/SOURCES.md](data/SOURCES.md). Current listing status and domain ownership have not been independently verified for every record.
+671 companies and 1,896 reference hosts from a Wikidata snapshot dated 2026-10-20, plus manually sourced LinkedIn and ChatGPT aliases. Google CrUX September 2026 adds 4,998 unique hosts extracted from the Top 5,000 origin buckets. The domain-only union contains **6,890 exact hostnames**. CrUX data is retrieved through checksum-bound independent export mirrors, attributed to Google under CC BY 4.0, and is not an official Google-hosted download. Sources and filtering rules: [data/SOURCES.md](data/SOURCES.md). Current listing status and domain ownership have not been independently verified for every record.
 
 Non-ASCII does not imply maliciousness. Matching a known hostname does not prove page safety. Brand detection uses heuristic Unicode skeletons and spelling comparisons and can produce false positives and omissions. No reputation lookup, target navigation, TLS certificate check or redirect tracing is performed. User reporting is deferred until a reviewed GitHub contribution flow is ready.
 
@@ -68,4 +68,4 @@ npx wrangler@4.127.0 deploy
 
 ## Chrome Web Store package
 
-The extension is version 0.3.1. Run `node scripts/package-extension.mjs` to build the upload ZIP with manifest.json at its root. Store copy and submission notes are in [store/](store/). Public privacy policy: https://loupe.zhaidewei.com/privacy.html. The developer dashboard submission has not been performed.
+The extension is version 0.3.2. Run `node scripts/package-extension.mjs` to build the upload ZIP with manifest.json at its root. Store copy and submission notes are in [store/](store/). Public privacy policy: https://loupe.zhaidewei.com/privacy.html. The developer dashboard submission has not been performed.

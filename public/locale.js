@@ -2,6 +2,7 @@
 (() => {
 let language='en';try{language=localStorage.getItem('url-loupe-language')==='zh'?'zh':'en';}catch{}
 const phrases={
+'与已保存的完整域名一致；这不代表网站安全。':'Matches a saved hostname. This does not establish website safety.',
 '无法解析网址，请输入完整的 HTTP(S) 网址或域名。':'Cannot parse this URL. Enter an HTTP(S) URL or domain.',
 '只检查 HTTP(S) 网址的 host。':'Only HTTP(S) hosts are supported.',
 '域名的 Punycode 编码无效。':'Invalid Punycode hostname.',
@@ -41,7 +42,7 @@ function english(value){
  if(/^\d+ 家公司参考库已就绪$/.test(value))return value.match(/\d+/)[0]+' company references ready';
  if(value.startsWith('共 ')&&value.includes(' 家匹配'))return value.replace(/^共 (\d+) 家匹配，显示前 (\d+) 家。完整快照可在 \/companies.json 查看。$/,'$1 matches, showing the first $2. Full snapshot: /companies.json');
  if(value.startsWith('其他相似候选（'))return value.replace('其他相似候选（','Other candidates (').replace('）',')');
- if(value.startsWith('采集日期：'))return 'Snapshot: '+value.slice(5,15)+'. Wikidata community records; current listing status and domain ownership are not independently verified. Manually sourced brand aliases: '+(value.match(/另有 (\d+) 条/)?.[1]||'0')+'.';
+ if(value.startsWith('采集日期：'))return 'Snapshot: '+value.slice(5,15)+'. Wikidata community records; current listing status and domain ownership are not independently verified. Manually sourced brand aliases: '+(value.match(/另有 (\d+) 条/)?.[1]||'0')+'. Merged with the Google CrUX September 2026 Top 5000 origin buckets; deduplicated by exact hostname.';
  if(value.startsWith('非 ASCII 字符：'))return 'Non-ASCII characters: '+value.slice('非 ASCII 字符：'.length);
  if(value.startsWith('可能仿冒 '))return 'Possible lookalike of '+value.slice('可能仿冒 '.length);
  const actual=value.match(/^真正的注册域名是 (.+)，不是 (.+)。$/);if(actual)return 'The actual registrable domain is '+actual[1]+' rather than '+actual[2]+'.';

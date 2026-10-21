@@ -1,5 +1,6 @@
 /* Local character hints; no domain reputation or maliciousness verdict. */
 (() => {
+  const savedHosts = new Set(globalThis.HOST_LENS_KNOWN_HOSTS || []);
   const asciiGroups = [
     ['iIl1|', 'i / I / l / 1 / |'], ['oO0', 'o / O / 0'],
     ['sS5', 's / S / 5'], ['zZ2', 'z / Z / 2'],
@@ -41,7 +42,7 @@
     const tokens = inspectHost(unicodeHost);
     const originalTokens = originalHost !== unicodeHost && originalHost !== asciiHost ? inspectHost(originalHost) : null;
     const key=asciiHost.toLowerCase().replace(/\.$/,'');
-    const knownReference=Object.hasOwn(globalThis.HOST_LENS_KNOWN_HOSTS||{},key)?globalThis.HOST_LENS_KNOWN_HOSTS[key]:null;
+    const knownReference=savedHosts.has(key)?true:null;
     // Only an exact saved host suppresses generic ASCII hints. Original non-ASCII stays visible.
     if(knownReference)for(const token of [...tokens,...(originalTokens||[])])if(!token.nonAscii){token.similar=false;token.hints=[];}
     const all = [...tokens, ...(originalTokens || [])];

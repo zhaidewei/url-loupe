@@ -1,8 +1,8 @@
-# URL Loupe 网站 v0.3.1
+# URL Loupe 网站 v0.3.2
 
 输入网址，即时检查 host 中的非 ASCII 字符、视觉相似字符与公司域名相似候选。所有字符与品牌比对在浏览器本地完成，不访问输入的目标网站。
 
-当前参考库：**671 家去重公司、1,896 个去重 host**。来源为 2026-10-20 采集的 Wikidata 社区记录，已过滤来源明确标注的历史声明。没有逐家公司独立验证当前上市状态或域名所有权；不把收录记录作为安全认证。
+当前精确匹配表：**6,890 个唯一 host**，由原有 1,898 条（公司域名与人工品牌补充）及 Google CrUX 2026-09 Top 5000 分组提取的 4,998 条合并，重复 6 条。运行时只保存域名字符串，保持完整 host，不折叠子域；来源与许可单独记录。公司品牌库仍为 **671 家公司、1,896 个 host**。来源为 2026-10-20 采集的 Wikidata 社区记录，已过滤来源明确标注的历史声明。没有逐家公司独立验证当前上市状态或域名所有权；不把收录记录作为安全认证。
 
 ## 启动
 
@@ -97,4 +97,4 @@ Wikidata 结构化数据采用 CC0；Unicode 数据、punycode.js、tldts 和 tl
 
 ## Chrome 商店材料
 
-extension/ 当前商店准备版为 0.3.1，新增英文／简体中文与面板语言切换，仍仅做字符检查。打包运行 `node scripts/package-extension.mjs`。商店介绍、权限与隐私填写说明及图片在 store/，公开隐私政策为 https://loupe.zhaidewei.com/privacy.html 。插件 ZIP 已在隔离 Chrome 中加载验证；尚未上传或提交商店审核。
+extension/ 当前商店准备版为 0.3.2，新增英文／简体中文与面板语言切换，仍仅做字符检查。打包运行 `node scripts/package-extension.mjs`。商店介绍、权限与隐私填写说明及图片在 store/，公开隐私政策为 https://loupe.zhaidewei.com/privacy.html 。插件 ZIP 已在隔离 Chrome 中加载验证；尚未上传或提交商店审核。

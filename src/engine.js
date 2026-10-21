@@ -13,7 +13,7 @@ export function distance(a,b,max=2){
  for(let i=1;i<=aa.length;i++){const row=[i];for(let j=1;j<=bb.length;j++)row[j]=Math.min(row[j-1]+1,prev[j]+1,prev[j-1]+(aa[i-1]===bb[j-1]?0:1));prev=row;}
  return prev[bb.length];
 }
-export function createIndex(companies){
+export function createIndex(companies,knownHosts=[]){
  const records=[];const exact=new Map();
  for(const company of companies)for(const host of company.domains){
   let url;try{url=new URL('https://'+host);}catch{continue;}
@@ -22,11 +22,12 @@ export function createIndex(companies){
   const record={company,host:parts.host,domain:parts.domain,label,shape:skeleton(label)};
   records.push(record);if(!exact.has(parts.domain))exact.set(parts.domain,[]);exact.get(parts.domain).push(record);
  }
- return {records,exact,companyCount:companies.length};
+ return {records,exact,knownHosts:new Set(knownHosts),companyCount:companies.length};
 }
 export function compare(data,index){
  const input=domainParts(data.asciiHost);if(input.ip)return {matches:[],references:[]};
  const references=index.exact.get(input.domain)||[];
+ if(index.knownHosts?.has(input.host.toLowerCase()))return {matches:[],references,knownHostMatch:true};
  if(references.length)return {matches:[],references};
  const label=globalThis.HostPunycode.toUnicode(input.label);
  let originalLabel=label;

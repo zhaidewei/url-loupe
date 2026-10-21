@@ -1,0 +1,44 @@
+{
+  "dataset": "Google Chrome UX Report (CrUX)",
+  "snapshot": "202609",
+  "ranking": "Global origin popularity buckets <= 5000; unordered within buckets",
+  "originCount": 5000,
+  "uniqueHosts": 4998,
+  "transform": "HTTP(S) origin → URL.hostname → lowercase ASCII/Punycode → remove one trailing dot → exact-host deduplication; retain subdomains",
+  "officialDocumentation": "https://developer.chrome.com/docs/crux/bigquery",
+  "officialLicense": "https://developer.chrome.com/docs/crux/methodology#license",
+  "license": "CC-BY-4.0",
+  "attribution": "Google, Chrome UX Report, September 2026. Hostnames extracted and deduplicated by URL Loupe.",
+  "mirror": {
+    "repository": "https://github.com/crissyfield/crux-dumps",
+    "commit": "5493dd425c47fc7895d7d92df688d70638fb2aa7",
+    "directGoogleExport": false
+  },
+  "retrievedAt": "2026-10-21",
+  "files": [
+    {
+      "file": "1000.txt.xz",
+      "rank": 1000,
+      "count": 1000,
+      "url": "https://raw.githubusercontent.com/crissyfield/crux-dumps/5493dd425c47fc7895d7d92df688d70638fb2aa7/2026/09/1000.txt.xz",
+      "sha256": "67d1b037fa67c9ac89375855e2cd22643f4b89bf25a5c71edf4b934c590033f9",
+      "compressedBytes": 6232
+    },
+    {
+      "file": "5000.txt.xz",
+      "rank": 5000,
+      "count": 4000,
+      "url": "https://raw.githubusercontent.com/crissyfield/crux-dumps/5493dd425c47fc7895d7d92df688d70638fb2aa7/2026/09/5000.txt.xz",
+      "sha256": "e0d32779922c88cc0fa674e9edf5ecc68d32f93257664b474e26056220f1647d",
+      "compressedBytes": 25392
+    }
+  ],
+  "hostsSha256": "2baf5c88549686cc1e37a15d142dae08f88a2f9227ae1271acbadb441bf64f7b",
+  "crossCheck": {
+    "mirrorUrl": "https://raw.githubusercontent.com/zakird/crux-top-lists/35ba243941defcd21882b134d9dd354824922482/data/global/202609.csv.gz",
+    "sha256": "be444a341be6b4b0ffb2acae08acef67c77243c01bb071a69b26f87c53011f88",
+    "origins": 5000,
+    "uniqueHosts": 4998,
+    "hostSetsEqual": true
+  }
+}

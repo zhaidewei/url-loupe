@@ -67,3 +67,9 @@ test('known normalized host still preserves non-ASCII in original input',()=>{
  const result=analyze('https://ｃhatgpt.com');assert.ok(result.knownReference);assert.ok(result.nonAsciiCount>0);assert.ok(result.originalTokens.some(t=>t.char==='ｃ'&&t.nonAscii));assert.equal(result.tokens.filter(t=>t.similar).length,0);
  const puny=analyze('https://сhatgpt.com');assert.equal(puny.knownReference,null);assert.ok(puny.nonAsciiCount>0);
 });
+test('CrUX domain-only references suppress ASCII hints without exempting unknown subdomains',()=>{
+ assert.ok(Array.isArray(context.HOST_LENS_KNOWN_HOSTS));assert.equal(context.HOST_LENS_KNOWN_HOSTS.length,6890);
+ const google=analyze('https://www.google.com');assert.ok(google.knownReference);assert.equal(google.similarCount,0);
+ assert.equal(analyze('https://www.google.com.attacker.test').knownReference,null);
+ assert.equal(analyze('https://new.www.google.com').knownReference,null);
+});
