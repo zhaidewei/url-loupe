@@ -789,7 +789,33 @@ var companies_default = { metadata: { title: "\u77E5\u540D\u4E0A\u5E02\u516C\u53
 // public/brand-aliases.json
 var brand_aliases_default = {
   notice: "\u4E3A\u5177\u4F53\u54C1\u724C\u548C\u77ED\u94FE\u8865\u5145\u7684\u4EBA\u5DE5\u53C2\u8003\uFF0C\u4E0D\u4EE3\u8868\u7F51\u7AD9\u5B89\u5168\u8BA4\u8BC1\u3002",
-  brands: [{ id: "alias-linkedin", name: "LinkedIn \u77ED\u94FE", nameEn: "LinkedIn", listedCompanyId: "Q2283", domains: ["lnkd.in"], sitelinks: 200, sourceUrl: "https://www.linkedin.com/help/linkedin/answer/a521889/short-urls-in-shared-posts", relationshipSource: "https://news.microsoft.com/2016/06/13/microsoft-to-acquire-linkedin/", verificationStatus: "manual_brand_reference" }]
+  brands: [
+    {
+      id: "alias-linkedin",
+      name: "LinkedIn \u77ED\u94FE",
+      nameEn: "LinkedIn",
+      listedCompanyId: "Q2283",
+      domains: [
+        "lnkd.in"
+      ],
+      sitelinks: 200,
+      sourceUrl: "https://www.linkedin.com/help/linkedin/answer/a521889/short-urls-in-shared-posts",
+      relationshipSource: "https://news.microsoft.com/2016/06/13/microsoft-to-acquire-linkedin/",
+      verificationStatus: "manual_brand_reference"
+    },
+    {
+      id: "alias-chatgpt",
+      name: "ChatGPT",
+      nameEn: "ChatGPT",
+      domains: [
+        "chatgpt.com"
+      ],
+      sitelinks: 200,
+      sourceUrl: "https://openai.com/index/chatgpt/",
+      verificationStatus: "manual_brand_reference",
+      retrievedAt: "2026-10-21"
+    }
+  ]
 };
 
 // src/engine.js

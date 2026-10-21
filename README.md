@@ -68,4 +68,4 @@ npx wrangler@4.127.0 deploy
 
 ## Chrome Web Store package
 
-The extension is version 0.3.0. Run `node scripts/package-extension.mjs` to build the upload ZIP with manifest.json at its root. Store copy and submission notes are in [store/](store/). Public privacy policy: https://loupe.zhaidewei.com/privacy.html. The developer dashboard submission has not been performed.
+The extension is version 0.3.1. Run `node scripts/package-extension.mjs` to build the upload ZIP with manifest.json at its root. Store copy and submission notes are in [store/](store/). Public privacy policy: https://loupe.zhaidewei.com/privacy.html. The developer dashboard submission has not been performed.

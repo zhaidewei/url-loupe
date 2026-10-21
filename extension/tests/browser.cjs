@@ -4,7 +4,7 @@ const fs=require('node:fs');const path=require('node:path');const http=require('
  const extension=process.env.URL_LOUPE_EXTENSION_DIR || path.resolve(__dirname,'..');
  const profile=fs.mkdtempSync(path.join(require('node:os').tmpdir(),'host-lens-browser-'));
  const artifacts=process.env.HOST_LENS_ARTIFACTS || path.resolve(extension,'..');
- const server=http.createServer((req,res)=>{res.setHeader('content-type','text/html;charset=utf-8');res.end('<!doctype html><html lang="zh"><body><h1>域名字符检查测试</h1><a id="link" href="https://аррӏе.com/path?x=hello">普通显示文字</a><p><a id="ascii" href="https://Inkd.in/enHTuknJ">LinkedIn 短链接测试</a></p></body></html>');});
+ const server=http.createServer((req,res)=>{res.setHeader('content-type','text/html;charset=utf-8');res.end('<!doctype html><html lang="zh"><body><h1>域名字符检查测试</h1><a id="link" href="https://аррӏе.com/path?x=hello">普通显示文字</a><a id="known" href="https://chatgpt.com/">Known saved host</a><p><a id="ascii" href="https://Inkd.in/enHTuknJ">LinkedIn 短链接测试</a></p></body></html>');});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
  let context;
  try{
@@ -21,7 +21,9 @@ const fs=require('node:fs');const path=require('node:path');const http=require('
   await page.evaluate(()=>{const a=document.createElement('a');a.id='dynamic';a.href='https://Inkd.in/a';a.textContent='动态链接';document.body.append(a);});
   await page.locator('#dynamic').focus();await page.locator('host-lens-inspector').waitFor();
   await page.keyboard.press('Escape');
+  await page.locator('#known').hover();await page.waitForTimeout(400);assert.equal(await page.locator('host-lens-inspector').count(),0);
   const popup=await context.newPage();await popup.goto(`chrome-extension://${id}/popup.html`);
+  await popup.locator('#url').fill('https://chatgpt.com');assert.equal(await popup.locator('#result .similar').count(),0);assert.equal(await popup.locator('#result .nonascii').count(),0);assert.ok((await popup.locator('#result .card').textContent()).includes('Matches a saved hostname'));
   await popup.locator('button[data-example="https://аррӏе.com"]').click();
   assert.equal(await popup.locator('#result .nonascii').count(),5);
   assert.equal(await popup.locator('#result .warning[role=alert]').count(),1);
@@ -66,6 +68,7 @@ const fs=require('node:fs');const path=require('node:path');const http=require('
     return result.description;
   });
   assert.ok(description.includes('<match>а</match>'));
+  const knownDescription=await worker.evaluate(()=>HostLensOmnibox.describe('https://chatgpt.com').description);assert.ok(!knownDescription.includes('<match>'));assert.ok(knownDescription.includes('chatgpt.com'));
   const reviewPromise=context.waitForEvent('page');
   await worker.evaluate(()=>openHostReview('https://user:secret@аpple.test/private?token=hidden','newForegroundTab'));
   const review=await reviewPromise;await review.waitForLoadState();

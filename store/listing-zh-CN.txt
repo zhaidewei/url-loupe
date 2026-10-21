@@ -23,3 +23,5 @@ URL Loupe 帮你逐字符核对域名，标记所有非 ASCII 字符，并提供
 网站：https://loupe.zhaidewei.com/
 源码与帮助：https://github.com/zhaidewei/url-loupe
 隐私政策：https://loupe.zhaidewei.com/privacy.html
+
+已知域名匹配：与随包参考库中的完整 host 精确一致时，隐藏普通 ASCII 相似字符提示。此规则不构成安全白名单，非 ASCII 输入仍会标记；不会自动放行未收录子域或相似拼写。

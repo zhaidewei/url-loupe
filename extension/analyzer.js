@@ -40,8 +40,12 @@
     else originalHost = originalHost.replace(/:\d*$/, '');
     const tokens = inspectHost(unicodeHost);
     const originalTokens = originalHost !== unicodeHost && originalHost !== asciiHost ? inspectHost(originalHost) : null;
+    const key=asciiHost.toLowerCase().replace(/\.$/,'');
+    const knownReference=Object.hasOwn(globalThis.HOST_LENS_KNOWN_HOSTS||{},key)?globalThis.HOST_LENS_KNOWN_HOSTS[key]:null;
+    // Only an exact saved host suppresses generic ASCII hints. Original non-ASCII stays visible.
+    if(knownReference)for(const token of [...tokens,...(originalTokens||[])])if(!token.nonAscii){token.similar=false;token.hints=[];}
     const all = [...tokens, ...(originalTokens || [])];
-    return {asciiHost, unicodeHost, originalHost, tokens, originalTokens,
+    return {asciiHost, unicodeHost, originalHost, tokens, originalTokens, knownReference,
       nonAsciiCount: all.filter(t=>t.nonAscii).length,
       similarCount: all.filter(t=>t.similar).length,
       ipv6: asciiHost.startsWith('['), hasCredentials: !!(url.username || url.password)};

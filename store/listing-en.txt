@@ -32,3 +32,5 @@ Character highlights are reading aids, not a phishing verdict. Ordinary ASCII wo
 Website: https://loupe.zhaidewei.com/
 Source and support: https://github.com/zhaidewei/url-loupe
 Privacy: https://loupe.zhaidewei.com/privacy.html
+
+Saved hostname matching: An exact match to a bundled reference hostname hides generic ASCII lookalike hints. This is not a safety allowlist. Non-ASCII input is still highlighted. Subdomains and similar spellings are not automatically exempted.

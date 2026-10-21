@@ -41,7 +41,7 @@ function english(value){
  if(/^\d+ 家公司参考库已就绪$/.test(value))return value.match(/\d+/)[0]+' company references ready';
  if(value.startsWith('共 ')&&value.includes(' 家匹配'))return value.replace(/^共 (\d+) 家匹配，显示前 (\d+) 家。完整快照可在 \/companies.json 查看。$/,'$1 matches, showing the first $2. Full snapshot: /companies.json');
  if(value.startsWith('其他相似候选（'))return value.replace('其他相似候选（','Other candidates (').replace('）',')');
- if(value.startsWith('采集日期：'))return 'Snapshot: '+value.slice(5,15)+'. Wikidata community records; current listing status and domain ownership are not independently verified. Includes one manually sourced brand alias.';
+ if(value.startsWith('采集日期：'))return 'Snapshot: '+value.slice(5,15)+'. Wikidata community records; current listing status and domain ownership are not independently verified. Manually sourced brand aliases: '+(value.match(/另有 (\d+) 条/)?.[1]||'0')+'.';
  if(value.startsWith('非 ASCII 字符：'))return 'Non-ASCII characters: '+value.slice('非 ASCII 字符：'.length);
  if(value.startsWith('可能仿冒 '))return 'Possible lookalike of '+value.slice('可能仿冒 '.length);
  const actual=value.match(/^真正的注册域名是 (.+)，不是 (.+)。$/);if(actual)return 'The actual registrable domain is '+actual[1]+' rather than '+actual[2]+'.';

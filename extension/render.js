@@ -32,6 +32,7 @@
     const add = (tag, text, cls) => { const e=document.createElement(tag); e.textContent=tr(text); if(cls)e.className=cls; card.append(e); return e; };
     add('h2','Host Lens · 域名字符检查');
     add('div','粉色＝非 ASCII　金框＝视觉相似字符','legend');
+    if(data.knownReference)add('p','与已保存的完整域名一致，已隐藏普通 ASCII 字符提示；这不代表网站安全。');
     if (data.nonAsciiCount > 0) {
       const warning=add('div','⚠ host 含非 ASCII 字符，请逐字核对域名。此提示覆盖所有非 ASCII 字符，不代表网站恶意。','warning');
       warning.setAttribute('role','alert');

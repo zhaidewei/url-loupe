@@ -6,7 +6,7 @@ const path=require('node:path');
 const {domainToUnicode}=require('node:url');
 const root=path.join(__dirname,'..');
 const context=vm.createContext({URL});
-for(const name of ['vendor/punycode.js','vendor/confusables.js','analyzer.js'])vm.runInContext(fs.readFileSync(path.join(root,name),'utf8'),context);
+for(const name of ['vendor/punycode.js','vendor/confusables.js','known-hosts.js','analyzer.js'])vm.runInContext(fs.readFileSync(path.join(root,name),'utf8'),context);
 const analyze=context.HostLens.analyze;
 test('LinkedIn ASCII ambiguity survives URL lowercasing',()=>{
  const data=analyze('https://Inkd.in/enHTuknJ');
@@ -14,7 +14,7 @@ test('LinkedIn ASCII ambiguity survives URL lowercasing',()=>{
  assert.equal(data.originalHost,'Inkd.in');
  assert.ok(data.originalTokens.find(t=>t.char==='I').similar);
  assert.equal(data.nonAsciiCount,0);
- assert.ok(analyze('https://lnkd.in').tokens[0].similar);
+ assert.equal(analyze('https://lnkd.in').similarCount,0);
 });
 test('Cyrillic hostname highlighted after Punycode decoding',()=>{
  const url=new URL('https://аррӏе.com');const data=analyze(url.href);
@@ -57,4 +57,13 @@ test('IP addresses and emoji parse consistently with Node URL',()=>{
   const data=analyze(input);const host=new URL(input).hostname;
   assert.equal(data.asciiHost,host);assert.equal(data.unicodeHost,host.startsWith('[')?host:domainToUnicode(host));
  }
+});
+test('saved hosts suppress ASCII hints only on exact normalized matches',()=>{
+ for(const host of ['chatgpt.com','CHATGPT.COM.','amazon.com','lnkd.in']){const result=analyze('https://'+host+'/path');assert.ok(result.knownReference,host);assert.equal(result.similarCount,0,host);assert.equal(result.nonAsciiCount,0,host);}
+ for(const host of ['chatgpt.com.attacker.test','chatgpt.test','notchatgpt.com','new.chatgpt.com','chatgpt.com.evil.test']){const result=analyze('https://'+host);assert.equal(result.knownReference,null,host);assert.ok(result.similarCount>0,host);}
+ assert.equal(analyze('https://chatgpt.com@attacker.test').knownReference,null);
+});
+test('known normalized host still preserves non-ASCII in original input',()=>{
+ const result=analyze('https://ｃhatgpt.com');assert.ok(result.knownReference);assert.ok(result.nonAsciiCount>0);assert.ok(result.originalTokens.some(t=>t.char==='ｃ'&&t.nonAscii));assert.equal(result.tokens.filter(t=>t.similar).length,0);
+ const puny=analyze('https://сhatgpt.com');assert.equal(puny.knownReference,null);assert.ok(puny.nonAsciiCount>0);
 });

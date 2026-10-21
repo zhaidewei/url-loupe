@@ -1,0 +1,4 @@
+import fs from 'node:fs';
+const base=new URL('../',import.meta.url);const dataset=JSON.parse(fs.readFileSync(new URL('public/companies.json',base)));const aliases=JSON.parse(fs.readFileSync(new URL('public/brand-aliases.json',base)));const hosts={};
+for(const company of [...dataset.companies,...aliases.brands])for(const host of company.domains){const key=new URL('https://'+host).hostname.toLowerCase().replace(/\.$/,'');if(!hosts[key])hosts[key]={name:company.nameEn||company.name,sourceUrl:company.sourceUrl};}
+fs.writeFileSync(new URL('extension/known-hosts.js',base),'// Generated from bundled company and manually sourced brand references. Exact-host matches only; not a safety allowlist.\nglobalThis.HOST_LENS_KNOWN_HOSTS = Object.freeze('+JSON.stringify(hosts)+');\n');console.log('Built '+Object.keys(hosts).length+' exact hostname references.');

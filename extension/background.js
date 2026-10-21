@@ -1,4 +1,4 @@
-importScripts('vendor/punycode.js','vendor/confusables.js','analyzer.js','i18n.js','omnibox.js');
+importScripts('vendor/punycode.js','vendor/confusables.js','known-hosts.js','analyzer.js','i18n.js','omnibox.js');
 function updateSuggestions(text,suggest){
   const result=HostLensOmnibox.describe(text);
   chrome.omnibox.setDefaultSuggestion({description:result.description});
