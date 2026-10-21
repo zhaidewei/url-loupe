@@ -13,17 +13,14 @@ const fs=require('node:fs');const path=require('node:path');const http=require('
   const item=settings.locator('extensions-item').filter({hasText:'URL Loupe'});await item.waitFor();
   const id=await item.getAttribute('id');assert.ok(id);
   const page=await context.newPage();await page.goto(`http://127.0.0.1:${server.address().port}`);
-  await page.locator('#link').hover();await page.locator('host-lens-inspector').waitFor();
-  assert.equal(await page.locator('#link').textContent(),'普通显示文字');
+  await page.locator('#link').hover();await page.waitForTimeout(350);
+  await page.locator('#ascii').focus();
+  assert.equal(await page.locator('host-lens-inspector').count(),0);
   assert.equal(await page.locator('#link').getAttribute('href'),'https://аррӏе.com/path?x=hello');
-  await page.screenshot({path:path.join(artifacts,'host-lens-hover.png')});
-  await page.keyboard.press('Escape');await page.locator('host-lens-inspector').waitFor({state:'detached'});
-  await page.evaluate(()=>{const a=document.createElement('a');a.id='dynamic';a.href='https://Inkd.in/a';a.textContent='动态链接';document.body.append(a);});
-  await page.locator('#dynamic').focus();await page.locator('host-lens-inspector').waitFor();
-  await page.keyboard.press('Escape');
-  await page.locator('#known').hover();await page.waitForTimeout(400);assert.equal(await page.locator('host-lens-inspector').count(),0);
+  console.log('PASS: hover and keyboard focus do not inject an inspection overlay.');
   const popup=await context.newPage();await popup.goto(`chrome-extension://${id}/popup.html`);
   await popup.locator('#url').fill('https://chatgpt.com');assert.equal(await popup.locator('#result .similar').count(),0);assert.equal(await popup.locator('#result .nonascii').count(),0);assert.ok((await popup.locator('#result .card').textContent()).includes('Saved hostname matched'));assert.equal(await popup.locator('#result .check.pass').count(),3);assert.equal(await popup.locator('#result .check.attention').count(),0);assert.equal(await popup.locator('#result details').getAttribute('open'),null);assert.equal(await popup.locator('#result .encoded').isVisible(),false);
+  await popup.locator('#url').fill('example.com/path?x=1');assert.equal(await popup.locator('#result .encoded').textContent(),'example.com');assert.equal(await popup.locator('#open-url').getAttribute('href'),'https://example.com/path?x=1');
   await popup.locator('#url').fill('https://www.google.com');assert.equal(await popup.locator('#result .similar').count(),0);assert.ok((await popup.locator('#result .card').textContent()).includes('Saved hostname matched'));
   await popup.locator('.examples-panel').evaluate(el=>el.open=true);await popup.locator('button[data-example="https://аррӏе.com"]').click();
   assert.equal(await popup.locator('#result .nonascii').count(),5);
@@ -122,6 +119,6 @@ const fs=require('node:fs');const path=require('node:path');const http=require('
   assert.ok((await worker.evaluate(()=>chrome.contextMenus.onClicked.hasListeners())));
   console.log('PASS: native toolbar popup opens from context handler; source tab unchanged and no new inspection tab; native menu click not automated.');
   console.log('PASS: omnibox worker loads; suggestion markup accepted by Chrome; Enter handler opens local review with Unicode highlighter; credentials and path omitted.');
-  console.log('PASS: MV3 extension loads; popup highlights Cyrillic and ASCII lookalikes; paths excluded; invalid URL error; hover/focus/dynamic anchors; Esc dismisses; link text and href unchanged.');
+  console.log('PASS: MV3 extension loads; popup highlights Cyrillic and ASCII lookalikes; paths excluded; invalid URL error; no content scripts or automatic hover; bare domains supported; link href unchanged.');
  }finally{await context?.close();server.close();fs.rmSync(profile,{recursive:true,force:true});}
 })().catch(e=>{console.error(e);process.exitCode=1});
