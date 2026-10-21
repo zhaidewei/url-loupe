@@ -5,3 +5,5 @@ header{position:relative;padding-left:42px}header>img{position:absolute;left:0;t
 body{width:420px;padding:18px;background:#f6f8fa}header{padding-bottom:14px}header h1{font-size:19px}.examples-panel{margin-top:9px;font-size:11px;color:#71808b}.examples-panel summary,.help summary{cursor:pointer}.examples{margin-top:6px}.input-group label{font-size:12px}.help{font-size:11px}footer{font-size:10px;color:#819096}.card{box-shadow:none}
 
 #open-url{display:inline-block;margin-top:12px;color:#34476d;font-size:12px;text-decoration:underline}#open-url[hidden]{display:none}
+
+html.standalone{min-height:100%;background:#f6f8fa}html.standalone body{width:min(100%,480px);margin:32px auto;padding:18px}

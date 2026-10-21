@@ -25,7 +25,7 @@ node cli/url-loupe.mjs --help
 
 The website itself is static: serve the **public/** directory using any static host. It makes no report or blacklist API requests. The included Node server is a local preview tool with legacy moderation code; do not expose that backend as a production service without reviewing it.
 
-Load **extension/** as an unpacked extension from Chrome's developer-mode extension page. It uses contextMenus, activeTab and HTTP(S) content scripts for link inspection. It cannot recolor or intercept ordinary address-bar input.
+Requires Chrome 127+. Right-click inspection opens the toolbar popup without leaving the page. Load **extension/** as an unpacked extension from Chrome's developer-mode extension page. It uses contextMenus, activeTab and HTTP(S) content scripts for link inspection. It cannot recolor or intercept ordinary address-bar input.
 
 ## CLI contract
 
@@ -68,4 +68,4 @@ npx wrangler@4.127.0 deploy
 
 ## Chrome Web Store package
 
-The extension is version 0.3.5. Run `node scripts/package-extension.mjs` to build the upload ZIP with manifest.json at its root. Store copy and submission notes are in [store/](store/). Public privacy policy: https://loupe.zhaidewei.com/privacy.html. The developer dashboard submission has not been performed.
+The extension is version 0.3.6. Run `node scripts/package-extension.mjs` to build the upload ZIP with manifest.json at its root. Store copy and submission notes are in [store/](store/). Public privacy policy: https://loupe.zhaidewei.com/privacy.html. The developer dashboard submission has not been performed.

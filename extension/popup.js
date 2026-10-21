@@ -24,6 +24,8 @@ input.addEventListener('input',event=>{userEdited=true;reviewHandoff=false;openL
 input.addEventListener('compositionend',()=>{userEdited=true;reviewHandoff=false;check(input.value);});
 for(const button of document.querySelectorAll('[data-example]'))button.addEventListener('click',()=>{userEdited=true;reviewHandoff=false;input.value=button.dataset.example;check(input.value);});
 (async()=>{
+  const ownTab=await chrome.tabs.getCurrent();
+  if(ownTab)document.documentElement.classList.add('standalone');
   const params=new URLSearchParams(location.hash.slice(1));
   if(params.has('host')){
     reviewHost=params.get('host');reviewHandoff=params.has('review');
@@ -38,7 +40,9 @@ for(const button of document.querySelectorAll('[data-example]'))button.addEventL
   if(!globalThis.chrome?.tabs?.query)return;
   try{
     const [tab]=await chrome.tabs.query({active:true,currentWindow:true});
+    const pending=tab && await chrome.runtime.sendMessage({type:'context-review',tabId:tab.id});
     if(userEdited)return;
+    if(pending?.target!==null && pending?.target!==undefined){input.value=pending.target;check(input.value);return;}
     if(tab?.url && /^https?:\/\//i.test(tab.url)){input.value=tab.url;check(tab.url);}
     else error.textContent=HostLensI18n.text('当前页面无法检查，请粘贴 HTTP(S) 网址。');
   }catch{if(userEdited)return;error.textContent=HostLensI18n.text('无法读取当前页，请手动粘贴网址。');}

@@ -5,8 +5,15 @@ function updateSuggestions(text,suggest){
   if(suggest)suggest(result.suggestions);
 }
 const reviewTargets=new Map();
+const contextTargets=new Map();
+chrome.tabs.onRemoved.addListener(tabId=>contextTargets.delete(tabId));
 chrome.runtime.onMessage.addListener((message,sender,reply)=>{
-  if(message?.type!=='review-target' || !sender.url?.startsWith(chrome.runtime.getURL('popup.html')))return;
+  if(!sender.url?.startsWith(chrome.runtime.getURL('popup.html')))return;
+  if(message?.type==='context-review'){
+    const entry=contextTargets.get(message.tabId);contextTargets.delete(message.tabId);
+    reply({target:entry && Date.now()-entry.time<60000 ? entry.target : null});return;
+  }
+  if(message?.type!=='review-target')return;
   const target=reviewTargets.get(message.token);reviewTargets.delete(message.token);reply({target:target || null});
 });
 async function openHostReview(text,disposition){
@@ -47,7 +54,11 @@ async function inspectContext(info,tab){
   // Inspect the real link destination, even when its visible text differs.
   // Invalid selected text stays invalid rather than silently checking the page.
   const text=info.linkUrl || (info.selectionText!==undefined ? info.selectionText : info.pageUrl || tab?.url || '');
-  await openHostReview(text,'newForegroundTab');
+  if(!Number.isInteger(tab?.id))return;
+  if(contextTargets.size>=100)contextTargets.delete(contextTargets.keys().next().value);
+  contextTargets.set(tab.id,{target:String(text),time:Date.now()});
+  // Keep the inspected webpage active and display the native toolbar popup.
+  await chrome.action.openPopup(Number.isInteger(tab.windowId)?{windowId:tab.windowId}:{});
 }
 chrome.runtime.onInstalled.addListener(registerInspectionMenu);
 chrome.contextMenus.onClicked.addListener((info,tab)=>{

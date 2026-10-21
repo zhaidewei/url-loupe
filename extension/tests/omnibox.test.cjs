@@ -5,7 +5,8 @@ function setup(){
  const context=vm.createContext({URL,console,crypto:require('node:crypto').webcrypto,chrome:{
   runtime:{getURL:file=>'chrome-extension://test/'+file,onInstalled:event('installed'),onMessage:event('message')},
   contextMenus:{removeAll:fn=>{calls.push(['removeAll']);fn();},create:(value,fn)=>{calls.push(['menu',value]);fn();},onClicked:event('clicked')},
-  tabs:{update:async value=>calls.push(['update',value]),create:async value=>calls.push(['create',value])},
+  action:{openPopup:async options=>calls.push(['popup',options])},
+  tabs:{onRemoved:event('removed'),update:async value=>calls.push(['update',value]),create:async value=>calls.push(['create',value])},
   omnibox:{setDefaultSuggestion:value=>calls.push(['default',value]),onInputStarted:event('started'),onInputChanged:event('changed'),onInputEntered:event('entered')}
  }});
  context.importScripts=(...files)=>files.forEach(file=>vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),context));
@@ -74,28 +75,24 @@ test('install/update creates one magnifier menu for links, selections and pages'
  assert.deepEqual(Array.from(menu.contexts),['link','selection','page']);
  assert.deepEqual(Array.from(menu.documentUrlPatterns),['http://*/*','https://*/*']);
 });
-test('right-click checks actual href, selected URL or current page in a local new tab',async()=>{
- const {context,calls}=setup();
+test('right-click opens toolbar popup and hands off target without creating tabs',async()=>{
+ const {context,calls,listeners}=setup();const targets=[];
  for(const info of [
   {linkUrl:'https://user:secret@Inkd.test/private',selectionText:'https://lnkd.in',pageUrl:'https://page.test'},
   {selectionText:'https://例子.test/path',pageUrl:'https://page.test'},
   {pageUrl:'https://chatgpt.com/path'},
   {}
- ])await context.inspectContext({menuItemId:'url-loupe-inspect',...info},{url:'https://fallback.test/path'});
- assert.deepEqual(calls.map(c=>c[1].url.split('&review=')[0]),[
-  'chrome-extension://test/popup.html#host=Inkd.test',
-  'chrome-extension://test/popup.html#host='+encodeURIComponent('例子.test'),
-  'chrome-extension://test/popup.html#host=chatgpt.com',
-  'chrome-extension://test/popup.html#host=fallback.test'
- ]);
- assert.ok(calls.every(([kind,args])=>kind==='create' && args.active && !args.url.includes('secret')));
+ ]){await context.inspectContext({menuItemId:'url-loupe-inspect',...info},{id:7,windowId:2,url:'https://fallback.test/path'});
+ let reply;listeners.message({type:'context-review',tabId:7},{url:'chrome-extension://test/popup.html'},r=>reply=r);targets.push(reply.target);}
+ assert.deepEqual(targets,['https://user:secret@Inkd.test/private','https://例子.test/path','https://chatgpt.com/path','https://fallback.test/path']);
+ assert.ok(calls.every(([kind,args])=>kind==='popup' && args.windowId===2));
 });
 test('right-click invalid selection and unsafe schemes never open target or fall back to page',async()=>{
- const {context,calls}=setup();
+ const {context,calls,listeners}=setup();const targets=[];
  for(const info of [{selectionText:'not a URL'},{linkUrl:'javascript:alert(1)'},{selectionText:''}])
-  await context.inspectContext({menuItemId:'url-loupe-inspect',pageUrl:'https://chatgpt.com',...info},{});
+  {await context.inspectContext({menuItemId:'url-loupe-inspect',pageUrl:'https://chatgpt.com',...info},{id:7});let r;listeners.message({type:'context-review',tabId:7},{url:'chrome-extension://test/popup.html'},v=>r=v);targets.push(r.target);}
  await context.inspectContext({menuItemId:'other',pageUrl:'https://chatgpt.com'},{});
- assert.equal(calls.length,3);assert.ok(calls.every(([,args])=>args.url.endsWith('#invalid=1')));
+ assert.equal(calls.length,3);assert.ok(calls.every(([kind])=>kind==='popup'));assert.deepEqual(targets,['not a URL','javascript:alert(1)','']);
 });
 test('full URL handoff stays in memory, is extension-only and consumed once',async()=>{
  const {context,listeners,calls}=setup();const target='https://example.test/a?x=1#section';
@@ -106,4 +103,14 @@ test('full URL handoff stays in memory, is extension-only and consumed once',asy
  listeners.message({type:'review-target',token},{url:'https://evil.test'},reply);assert.equal(result,undefined);
  listeners.message({type:'review-target',token},{url:'chrome-extension://test/popup.html#host=example.test'},reply);assert.equal(result.target,target);
  listeners.message({type:'review-target',token},{url:'chrome-extension://test/popup.html'},reply);assert.equal(result.target,null);
+});
+test('toolbar handoff is isolated by tab, one-shot, removed on close and expires',async()=>{
+ const {context,listeners}=setup();
+ const take=tabId=>{let value;listeners.message({type:'context-review',tabId},{url:'chrome-extension://test/popup.html'},r=>value=r.target);return value;};
+ await context.inspectContext({menuItemId:'url-loupe-inspect',linkUrl:'https://one.test'},{id:1});
+ await context.inspectContext({menuItemId:'url-loupe-inspect',linkUrl:'https://two.test'},{id:2});
+ assert.equal(take(1),'https://one.test');assert.equal(take(1),null);
+ listeners.removed(2);assert.equal(take(2),null);
+ await context.inspectContext({menuItemId:'url-loupe-inspect',linkUrl:'https://expired.test'},{id:3});
+ vm.runInContext('Date.now=()=>Number.MAX_SAFE_INTEGER',context);assert.equal(take(3),null);
 });

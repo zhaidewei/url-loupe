@@ -8,7 +8,7 @@ const fs=require('node:fs');const path=require('node:path');const http=require('
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
  let context;
  try{
-  context=await chromium.launchPersistentContext(profile,{headless:true,channel:'chromium',args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`],viewport:{width:900,height:760}});
+  context=await chromium.launchPersistentContext(profile,{headless:process.env.URL_LOUPE_HEADFUL!=='1',channel:'chromium',args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`],viewport:{width:900,height:760}});
   const settings=await context.newPage();await settings.goto('chrome://extensions');
   const item=settings.locator('extensions-item').filter({hasText:'URL Loupe'});await item.waitFor();
   const id=await item.getAttribute('id');assert.ok(id);
@@ -78,30 +78,49 @@ const fs=require('node:fs');const path=require('node:path');const http=require('
   assert.ok(review.url().startsWith('chrome-extension://'));
   assert.ok(!review.url().includes('secret') && !review.url().includes('hidden'));
   assert.equal(await review.locator('#result .nonascii').count(),1);
+  const bounds=await review.locator('body').boundingBox();assert.ok(Math.abs(bounds.x-(900-bounds.width)/2)<2);
   await review.screenshot({path:path.join(artifacts,'host-lens-omnibox-review.png')});
   const invalidPromise=context.waitForEvent('page');
   await worker.evaluate(()=>openHostReview('javascript:alert(1)','newForegroundTab'));
   const invalid=await invalidPromise;await invalid.waitForLoadState();
   await worker.evaluate(()=>new Promise((resolve,reject)=>chrome.contextMenus.update('url-loupe-inspect',{},()=>chrome.runtime.lastError ? reject(new Error(chrome.runtime.lastError.message)) : resolve())));
-  const menuReviewPromise=context.waitForEvent('page');
-  await worker.evaluate(()=>inspectContext({menuItemId:'url-loupe-inspect',linkUrl:'https://user:secret@аpple.test/private?source=inspection#section',selectionText:'https://chatgpt.com',pageUrl:'https://page.test'},{}));
-  const menuReview=await menuReviewPromise;await menuReview.waitForLoadState();
-  await menuReview.locator('#result .nonascii').first().waitFor();
-  assert.equal(await menuReview.locator('#url').inputValue(),'аpple.test');
-  assert.equal(await menuReview.locator('#result .nonascii').count(),1);
-  assert.ok(!menuReview.url().includes('secret'));assert.ok(await menuReview.locator('header img').isVisible());
+  await page.bringToFront();
+  const sourceTab=await worker.evaluate(async()=> (await chrome.tabs.query({active:true,currentWindow:true}))[0]);
+  const tabCount=await worker.evaluate(async()=> (await chrome.tabs.query({})).length);
+  const browserSession=await context.browser().newBrowserCDPSession();
+  await worker.evaluate(sourceTab=>inspectContext({menuItemId:'url-loupe-inspect',linkUrl:'https://user:secret@аpple.test/private?source=inspection#section',selectionText:'https://chatgpt.com',pageUrl:'https://page.test'},sourceTab),sourceTab);
+  const views=await worker.evaluate(()=>chrome.runtime.getContexts({contextTypes:['POPUP']}));assert.equal(views.length,1);
+  const {targetInfos}=await browserSession.send('Target.getTargets');
+  const nativePopup=targetInfos.find(t=>t.url===views[0].documentUrl && !t.attached);assert.ok(nativePopup);
+  const {sessionId}=await browserSession.send('Target.attachToTarget',{targetId:nativePopup.targetId,flatten:false});
+  let commandId=0;
+  async function popupCommand(method,params){
+    const id=++commandId;
+    return new Promise((resolve,reject)=>{
+      const timeout=setTimeout(()=>{browserSession.off('Target.receivedMessageFromTarget',handler);reject(new Error('Popup CDP timeout: '+method+' '+(params.expression||'')));},10000);
+      const handler=event=>{const result=JSON.parse(event.message);if(event.sessionId!==sessionId || result.id!==id)return;clearTimeout(timeout);browserSession.off('Target.receivedMessageFromTarget',handler);result.error?reject(new Error(result.error.message)):resolve(result.result);};
+      browserSession.on('Target.receivedMessageFromTarget',handler);
+      browserSession.send('Target.sendMessageToTarget',{sessionId,message:JSON.stringify({id,method,params})}).catch(reject);
+    });
+  }
+  await popupCommand('Runtime.runIfWaitingForDebugger',{});
+  const evaluatePopup=async expression=>(await popupCommand('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:false})).result.value;
   const target=new URL('https://аpple.test/private?source=inspection#section').href;
-  assert.equal(await menuReview.locator('#open-url').getAttribute('href'),target);
-  await menuReview.locator('#language').click();assert.equal(await menuReview.locator('#open-url').getAttribute('href'),target);
+  assert.ok((await evaluatePopup('document.querySelector("#url").value')).includes('аpple.test/private'));
+  assert.equal(await evaluatePopup('document.querySelector("#open-url").href'),target);
+  assert.equal(await evaluatePopup('document.documentElement.classList.contains("standalone")'),false);
+  assert.equal(await worker.evaluate(async()=> (await chrome.tabs.query({})).length),tabCount);
+  assert.equal(page.url(),`http://127.0.0.1:${server.address().port}/`);
+  await evaluatePopup('document.querySelector("#language").click()');assert.equal(await evaluatePopup('document.querySelector("#open-url").href'),target);
   let navigations=0;await context.route('https://xn--pple-43d.test/**',route=>{navigations++;return route.fulfill({contentType:'text/html',body:'<h1>Intercepted test destination</h1>'});});
   assert.equal(navigations,0);
-  const destinationPromise=context.waitForEvent('page');await menuReview.locator('#open-url').click();
+  const destinationPromise=context.waitForEvent('page',{timeout:10000});
+  // Opening the link closes the native popup, so its Runtime response can be discarded.
+  await browserSession.send('Target.sendMessageToTarget',{sessionId,message:JSON.stringify({id:++commandId,method:'Runtime.evaluate',params:{expression:'document.querySelector("#open-url").click()',userGesture:true}})});
   const destination=await destinationPromise;await destination.waitForLoadState();assert.equal(destination.url(),target);assert.equal(navigations,1);await destination.close();
-  await menuReview.locator('#url').fill('https://example.test/new?x=2#fragment');assert.equal(await menuReview.locator('#open-url').getAttribute('href'),'https://example.test/new?x=2#fragment');
-  await menuReview.locator('#url').fill('javascript:alert(1)');assert.equal(await menuReview.locator('#open-url').isVisible(),false);
-  console.log('PASS: explicit Open original URL click preserves path/query/fragment, strips credentials, opens a new tab; target request intercepted locally; edits update target and invalid input hides link.');
+  console.log('PASS: native toolbar popup displays real destination and Open original URL; source tab and tab count unchanged; explicit click preserves path/query/fragment; destination intercepted locally.');
   assert.ok((await worker.evaluate(()=>chrome.contextMenus.onClicked.hasListeners())));
-  console.log('PASS: context-menu handler opens local review for actual link destination with magnifier header; native menu click not automated.');
+  console.log('PASS: native toolbar popup opens from context handler; source tab unchanged and no new inspection tab; native menu click not automated.');
   console.log('PASS: omnibox worker loads; suggestion markup accepted by Chrome; Enter handler opens local review with Unicode highlighter; credentials and path omitted.');
   console.log('PASS: MV3 extension loads; popup highlights Cyrillic and ASCII lookalikes; paths excluded; invalid URL error; hover/focus/dynamic anchors; Esc dismisses; link text and href unchanged.');
  }finally{await context?.close();server.close();fs.rmSync(profile,{recursive:true,force:true});}
