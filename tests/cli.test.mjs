@@ -18,3 +18,9 @@ test('CLI exit codes distinguish findings, clean execution and usage errors',()=
 test('CLI shares merged exact-host references with the browser interfaces',()=>{
  const r=run(['--fail-on-findings','https://www.google.com']);assert.equal(r.status,0,r.stderr);const result=JSON.parse(r.stdout);assert.equal(result.knownHostMatch,true);assert.equal(result.hasFindings,false);assert.equal(result.referenceData.knownHosts,6890);
 });
+test('schema v2 uses compact references instead of duplicating full company records',()=>{
+ const r=run(['arnazon.test']);assert.equal(r.status,0);const result=JSON.parse(r.stdout);assert.equal(result.schemaVersion,2);
+ assert.ok(result.annotations.some(a=>a.match?.host==='amazon.com'));
+ for(const a of result.annotations){if(a.match){assert.ok(a.match.companyId);assert.equal(a.match.websites,undefined);assert.equal(a.match.company instanceof Object,false);}}
+ assert.ok(Buffer.byteLength(r.stdout)<2500,'Single lookalike output should stay compact for agents');
+});

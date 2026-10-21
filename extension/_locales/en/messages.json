@@ -3,7 +3,7 @@
     "message": "URL Loupe"
   },
   "extensionDescription": {
-    "message": "Inspect non-ASCII and lookalike hostname characters locally. Right-click a link, use the toolbar or type host + Tab."
+    "message": "Inspect non-ASCII hostnames and brand lookalikes locally. Right-click links, use the toolbar or type host + Tab."
   },
   "actionTitle": {
     "message": "Inspect hostname characters"

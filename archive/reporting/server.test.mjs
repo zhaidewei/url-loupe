@@ -1,5 +1,5 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import os from 'node:os';import path from 'node:path';
-import {createApp} from '../server.mjs';import {openStore} from '../store.mjs';
+import {createApp} from './server.mjs';import {openStore} from './store.mjs';
 test('report persistence, manual approval, rejection, revocation and audit',async()=>{
  const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'host-lens-server-')),file=path.join(tmp,'reports.sqlite');
  const {server,store}=await createApp({dbPath:file});await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin='http://127.0.0.1:'+server.address().port;

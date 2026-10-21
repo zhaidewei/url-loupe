@@ -15,3 +15,12 @@ test('merged runtime references contain exactly the deduplicated old plus CrUX h
  const known=createIndex([],hosts);for(const h of ['www.google.com','github.com']){const result=compare(HostLens.analyze(h),known);assert.equal(result.knownHostMatch,true);assert.equal(result.matches.length,0);}
  for(const h of ['www.google.com.attacker.test','new.www.google.com'])assert.ok(!compare(HostLens.analyze(h),known).knownHostMatch);
 });
+test('runtime company projection preserves brand comparison without source snapshot payloads',()=>{
+ const full=[...read('../public/companies.json').companies,...read('../public/brand-aliases.json').brands];const runtime=read('../data/runtime-references.json');
+ assert.equal(runtime.companies.length,full.length);assert.equal(runtime.metadata.companyCount,671);
+ const original=createIndex(full,hosts),projected=createIndex(runtime.companies,hosts);
+ for(const value of ['Inkd.in','arnazon.test','аррӏе.test','amazon.com.attacker.test','amazon.co.uk','www.google.com','unknown-clean.test']){
+  const data=HostLens.analyze(value);const brief=idx=>{const r=compare(data,idx);return {known:r.knownHostMatch,matches:r.matches.map(m=>[m.company.id,m.host,m.kind]),references:r.references.map(m=>[m.company.id,m.host])};};assert.deepEqual(brief(projected),brief(original),value);
+ }
+ assert.ok(runtime.companies.every(c=>!('websites'in c)&&!('listingStatements'in c)));
+});

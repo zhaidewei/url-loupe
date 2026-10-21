@@ -1,77 +1,41 @@
 # URL Loupe · URL 放大镜
 
-Chrome Manifest V3 扩展 v0.3.8，本地检查网址 host 中的非 ASCII 字符和视觉相似字符。
+Chrome Manifest V3 扩展 0.4.0，与网页共用字符分析和品牌比对核心，支持英文与简体中文。
 
-## 安装
+## 安装与升级
 
-已安装旧版：覆盖原插件文件夹后，在 `chrome://extensions` 中点击本插件的重新加载按钮。若解压到了新目录，可移除旧版后加载新目录，避免两个版本争用 `host` 关键字。
+解压 `url-loupe-chrome-0.4.0.zip`，在 `chrome://extensions` 开启开发者模式，加载根目录含 manifest.json 的插件文件夹。商店上传材料目录不包含根 manifest，不能作为插件目录加载。
 
-1. 解压 host-lens.zip。
-2. 在 Chrome 地址栏打开 `chrome://extensions`。
-3. 开启右上角“开发者模式”。
-4. 点击“加载已解压的扩展程序”，选择含 manifest.json 的 host-lens 文件夹。
-5. 将“URL 放大镜”固定到工具栏。网页链接使用右键菜单主动检查。
+升级已有解压版时，替换原文件夹内容后点击重新加载；如更换目录，请移除旧插件以免多个版本同时运行。需要 Chrome 127+。旧版曾注入悬停浮层的网页应刷新一次。
 
-## 使用
+## 使用与展示
 
-### 地址栏检查
+- 右键链接、选中的网址或 HTTP(S) 页面，选择“使用 URL Loupe 检查”，直接打开原生工具栏弹窗，原网页保留。
+- 点击工具栏图标检查当前网址，或在面板输入／粘贴网址，即时检查。省略协议的 `example.com/path` 默认按 HTTPS 解析。输入法组合期间不更新结果。
+- 在地址栏输入 `host` 后按 Tab，再输入网址；回车打开独立检查页，不自动访问目标。
+- 所有非 ASCII 域名字符标粉色。只有存在品牌候选时，才用金色标出实际差异，如 `rn` 与 `m`，并给出对应说明与参考来源。普通未知英文域名不再逐字高亮。
+- 悬停、聚焦或点击已标记字符，可突出其对应解释。点击“检查详情”查看实际 ASCII/Punycode；点击“打开原网址”才在新标签页访问完整目标，保留路径、参数和片段，去除内嵌账号密码。
 
-1. 在地址栏输入 `host`，然后按 Tab。
-2. 粘贴或输入网址，例如 `https://аpple.test`。
-3. 下拉建议会突出显示形似字符，并列出非 ASCII 与相似字符数量。
-4. 按回车，在当前标签页打开插件自己的完整高亮检查页。
+只有主动操作才检查，不注入网页内容脚本，不提供自动悬停浮层，不接管普通点击。Chrome 原生地址栏的颜色不能修改。
 
-地址栏建议只支持 Chrome 提供的强调样式；粉色和金框出现在完整结果页。插件不会访问输入网站。检查页仅接收 host，不接收路径、参数或 @ 前的用户名和密码。选择下拉建议中的字符详情，同样打开完整检查页。Ctrl/Cmd 或 Shift 等组合键的标签页行为遵循 Chrome 传入的打开位置。
+## 参考数据与边界
 
-这只在主动进入 `host` 模式后生效。普通地址栏输入仍由 Chrome 处理。
+随包保留 6890 个完整 host 的精确匹配表，含 Google CrUX 2026-09 Top 5000 origin 分组提取的 4998 个 host；品牌比对覆盖 671 家公司及人工补充品牌。CrUX 域名仅用于精确匹配，不新增针对全部 CrUX 域名的模糊比较。
 
-### 工具栏与网页链接
+原始非 ASCII 字符始终提示，已收录域名不构成安全认证，未收录也不构成恶意判定。品牌比较使用启发式视觉骨架、拼写与注册域边界，可能误报或漏报。不查询线上信誉、证书或跳转链。只分析 HTTP(S) 的 host；路径、参数与身份信息不参与字符告警。mailto:、tel:、javascript:、file: 等协议不支持。
 
-右键链接、选中的网址或页面空白处，选择“使用 URL Loupe 检查”，直接打开工具栏插件弹窗，保持原网页与标签页不变。需要 Chrome 127 或更新版本。结果下方可点击“打开原网址”，在新标签页打开原链接，保留路径、参数与片段，去除内嵌账号密码。完整网址仅在内存中短暂传递；刷新检查页后该入口可能不可用，可重新右键检查或粘贴完整网址。链接优先检查真实 href；无效选中文字显示输入错误，不会改为检查当前页面。菜单沿用插件放大镜图标。
+## 权限与隐私
 
-点击工具栏图标，检查当前页面 host，或输入、粘贴任意网址，即时显示检查结果，无需点击按钮或按回车。清空输入会清空结果；中文等输入法会在选词确认后更新。面板内有三个示例。
-插件不注入网页内容脚本，不提供自动悬停或聚焦检查。链接文本、href、点击和复制行为保持原样。
+仅申请 `activeTab` 和 `contextMenus`；无 content_scripts、host_permissions、遥测、账号、广告或持久化浏览记录。网址、品牌参考和 Unicode 数据均在本地处理；完整目标只在内存中传递，不写进检查页地址。刷新检查页或重启浏览器可能丢失“打开原网址”的完整目标，可重新检查。
 
-- 粉色底线：所有非 ASCII 字符，不限语言或字母表，也包括非 ASCII 符号。
-- 明确告警：host 含任何非 ASCII 字符，地址栏建议显示“⚠ 含非 ASCII 字符”，完整面板显示告警横幅。
-- 金色边框：视觉相似字符；悬停单字符可查看码点与映射。
-- 同时满足两项：粉色背景加金框。
-- 始终显示浏览器实际使用的 ASCII / Punycode host。
-- 若原始输入与规范化 host 不同，同时显示原始 host。
+隐私政策：https://loupe.zhaidewei.com/privacy.html
 
-## 检查范围
+## 开发与分发
 
-Unicode 16.0.0 官方 confusables 表提供 6,355 个映射。当前将映射目标含 ASCII 字母或数字的字符列为形似提示。ASCII 另行提供 i/I/l/1/|、o/O/0、s/S/5、z/Z/2、b/6、B/8、g/9 及 rn/m、vv/w 的阅读提示。这些显式规则只用于提示，不声称覆盖所有字体或全部 Unicode 混淆。
+在仓库根目录运行 `npm run build` 和 `npm run test:extension`。`src/analyzer.js` 是共享字符源码，`src/extension-analysis.js` 是插件品牌适配；extension/analyzer.js 由构建生成，不手工维护副本。
 
-普通英文中的 i、l、o 等也会高亮，合法中文域名也会显示非 ASCII 标记。高亮不表示恶意。本版不比较品牌域名，不联网查信誉，不阻止导航，也不追踪跳转链。
+运行 `node scripts/package-extension.mjs` 生成 manifest 位于根目录的上传 ZIP，store/ 保存商店文案与图片。尚未代用户提交商店。
 
-Chrome 扩展不能修改浏览器原生地址栏中的字符颜色。高亮出现在工具栏面板及独立检查页中。检查仅限 host；不高亮路径、参数或 @ 前的身份信息。浏览器已经规范化过的地址无法恢复原始大小写或原始全角字符，手动粘贴可查看原始输入。
+## 来源与许可
 
-右键菜单显示于 HTTP(S) 页面；浏览器内部页等受限页面可能无法提供该入口。可将完整网址或省略协议的域名粘贴到面板检查。mailto:、tel:、javascript: 与 file: 等协议不支持。插件不接管页面点击。
-
-## 权限和隐私
-
-`contextMenus` 用于添加右键检查入口，只在 HTTP(S) 页面显示。`activeTab` 用于点击插件时读取当前标签页 URL。`omnibox.keyword` 注册 `host` 地址栏入口；后台 service worker 在输入时分析字符，并在回车后打开扩展内检查页，不增加新的权限项。无 content_scripts、host_permissions 或全站访问授权；仅在主动操作后检查。没有服务器、遥测、账号、持久化存储或运行时网络请求。分析函数仅返回 host，不输出输入网址中的密码。
-
-## 验证
-
-在本目录运行 `node --test tests/*.test.cjs`。自动化结果和浏览器实测记录见 `VALIDATION.md`。
-
-## 数据来源和许可
-
-- Unicode confusables 16.0.0： https://www.unicode.org/Public/security/16.0.0/confusables.txt
-- UTS #39： https://www.unicode.org/reports/tr39/
-- punycode.js 2.3.1： https://github.com/mathiasbynens/punycode.js/tree/v2.3.1
-- 数据及依赖的许可见 vendor/ 下的许可证。
-
-Unicode 数据和 punycode.js 均随扩展打包，运行时无需下载。
-
-## 商店版本 0.3.8
-
-新增放大镜 PNG 图标、英文与简体中文本地化、面板语言切换及公开隐私政策链接。初始语言跟随 Chrome 界面语言（中文或英文），面板切换只影响当前面板，不持久化。右键菜单与地址栏建议跟随 Chrome 界面语言。
-
-商店上传包由仓库根目录 scripts/package-extension.mjs 生成，manifest.json 位于 ZIP 根目录；不打包测试、源码文档和网站数据。隐私政策：https://loupe.zhaidewei.com/privacy.html 。目前仅准备上传材料，未提交商店审核。
-
-## 合并参考表 0.3.8
-
-Google CrUX 2026-09 的 Top 5000 origin 分组，提取去重后 4998 个 host，与原有 1898 条合并为 6890 条。运行时 known-hosts.js 只存域名字符串，精确匹配后隐藏普通 ASCII 提示，非 ASCII 不变；不新增针对 CrUX 域名的品牌模糊比较。Google 数据采用 CC BY 4.0，来源、快照与修改说明见 vendor/CRUX-NOTICE.txt 和仓库 data/crux/。
+Unicode confusables 16.0.0、punycode.js 2.3.1、tldts 与 CrUX 的许可均随包位于 vendor/；CrUX 数据采用 CC BY 4.0，其他数据和代码各自保留原许可。来源、快照和转换记录见仓库 data/。运行时不下载或执行远程代码。

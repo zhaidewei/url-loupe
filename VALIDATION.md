@@ -153,3 +153,70 @@ Node.js 22.23.1；`npm test`：14/14 通过。
 
 - 按用户要求将当前 main 的 public/ 发布至 loupe.zhaidewei.com，Cloudflare 版本 a0ed8314-8f80-4724-9121-2b4d886657ad；静态资源与已上线内容一致，无待上传差异。
 - 正式 HTTPS 主页及隐私页 HTTP 200；671 家公司、6890 个完整 host、英中切换、非 ASCII、LinkedIn/Amazon 候选及手机布局回归通过，无页面错误或目标/API 请求。演示页英中切换、三组链接结果和点击留页回归通过；政策为插件 0.3.8 的最小权限版本。
+
+## 大扫除代码审查（2026-10-21，只读结论）
+
+审查基线：6b9f7f709544b45da47e9ab82b6c6b7416c987d5，插件 0.3.8。使用 da-sao-chu 决策树核对使用方、替代能力、来源角色及删除影响。本轮未修改程序、删除资产、重建发布包或部署；仅追加本条记录。以下均为待实施建议，不表示已批准删除。
+
+### 1. P2：默认本地预览仍强制加载已退役的举报后端
+
+- 证据：server.mjs:6,15-16 每次 createApp 都打开 SQLite；26-39 仍提供举报和黑名单 API；package.json:11,13 仍将它用作默认启动与 review。public/app.js:93-95 仅获取静态参考文件；wrangler.toml 只部署 public/。README.zh-CN.md:75 明确写明当前网页不再使用历史审核能力。
+- 当前职责仍有调用方：start.command、npm start、tests/browser.mjs 调用 server.mjs，因此不能整文件直接删除。
+- 决策：REPAIR 默认本地服务器，只提供静态资源；ARCHIVE 举报 API、store.mjs、scripts/review.mjs 和相应历史测试；替换调用后再移除默认入口中的 SQLite 依赖。先确认是否存在真实历史数据库需要单独保留，不删除 runtime 数据。
+- 附带实测：隔离临时数据库启动当前本地服务器，/demo 返回 404，/demo.html 返回 200；/demo-icon.svg 的 MIME 为 application/octet-stream。静态服务器替代时应对齐线上漂亮路径及 SVG MIME。
+- 收益主要是免除当前功能不需要的数据库创建、实验性 SQLite 运行依赖和后端维护。在线 Cloudflare 网站没有部署这组 API。
+
+### 2. P2：CLI 同时携带完整来源数据和重复的解释节点数据
+
+- 证据：src/cli.js:5 将完整 companies.json 打进独立 CLI；36-39 已对 matches/references 做精简，但直接输出原始 explanation.annotations。src/explanation.js:26,33 将完整 primary 记录写入多个 annotation.match，里面包含 company.websites、listingStatements 等来源字段。
+- 实测：arnazon.test 输出为 7519 字节；两个解释节点各带一份完整公司记录。仅在内存中将 annotation.match 改为精简标识、域名和类型后，示例为 1277 字节。此数值是单例投影实验，不是已发布结果或整批承诺。
+- 完整公司 JSON 为 678196 字节；按当前 CLI 算法与顶层输出使用字段投影出的候选数据为 126319 字节。当前独立 CLI 文件为 1156447 字节；尚未构建精简版，不能把 JSON 差额直接当成最终包节省量。
+- 决策：MERGE 解释节点中的候选引用，CLI 使用独立的最小运行时数据投影，完整来源继续保留。会改变 annotations.match 的已有内容，须明确 JSON schema 兼容方案并增加等价性验证后实施。
+
+### 3. P2：网页与插件各自维护一份几乎相同的字符分析器
+
+- 证据：public/analyzer.js 和 extension/analyzer.js 的主解析、Unicode、形似规则相同；差异为插件额外的 savedHosts 精确匹配和普通 ASCII 提示抑制。scripts/build.mjs 只构建品牌引擎和 CLI；两份分析器没有自动同步或生成步骤。
+- 决策：MERGE 成一个源码入口，通过参数或入口适配保留网页／插件策略差异，构建时生成各自可离线运行的产物。不能直接把一份覆盖另一份，也不能让插件运行时从网站加载代码。
+- 保留差异：网页有品牌比对，插件当前只有字符检查与完整已知 host 匹配。回归必须覆盖非 ASCII 永不被已知匹配抑制、原始全角字符、Punycode、userinfo/path 排除与精确子域边界。
+
+### 4. P3：样式和翻译含旧界面残留，可小步删除
+
+- public/style.css:1 和 public/explain.css:1,3 仍包含 topbar、result-grid、report-section、report-status、blacklist-alert 等旧界面选择器；当前 public/index.html 和 public/app.js 没有对应结构或类名。共两份网站样式为 18933 字节，但不能把全部视为可删除内容。
+- extension/popup.css:1,5 的 body、footer、examples 有前后覆盖；.card 规则位于外部页面，而卡片渲染于独立 ShadowRoot（extension/render.js），该外部规则不能作用于结果卡片。应保留 standalone 与工具栏弹窗宽度差异。
+- extension/i18n.js 共 51 个字典项，按运行时源文件的静态字符串使用检查，发现 9 个旧文案候选无引用，例如旧标题、旧长告警、旧 IPv6 说明。动态拼接和前缀映射须保留，不能直接按静态搜索批量删除所有未命中项。
+- 决策：DELETE 已证实不再使用的规则和文案，合并覆盖到其实际规则；用英中、桌面／手机、输入／错误／详情展开等状态作视觉回归。
+
+### 5. P3：说明文档存在当前状态冲突
+
+- README.zh-CN.md:71 写域名、DNS 和托管尚未配置；97-99 已写现有 Cloudflare 子域部署。73 仍写待 GitHub 开源后再处理举报，项目已公开。89 的测试数量仍为 17，当前网站／CLI 为 20。
+- 决策：REPAIR 已有说明条目，合并重复的部署／举报说明。VALIDATION.md 和 extension/VALIDATION.md 的历史记录属于追加式证据，保留原有历史。
+
+### 保留与暂缓
+
+- RETAIN data/ 来源快照、校验值、来源说明和第三方许可证；约 6 MB 的 data/ 属于可复现证据，不能因为运行时不直接读取而当垃圾删除。
+- RETAIN 各端需要的生成文件、随包域名库和第三方库。相同分发内容可用构建同步，网站、CLI、插件仍需各自独立运行。
+- RETAIN Punycode、PSL、Unicode confusables 处理与现有边界测试。
+- HOLD 翻译机制整体替换：public/locale.js:55-68 当前观察 DOM 后遍历翻译，extension/popup.js:51-53 用另一套渲染翻译。可统一显式翻译函数，但这涉及渲染与输入保真；本轮未测到性能故障，优先级低于死代码和重复数据清理。
+- 不建议为精简引入前端框架、在线检测服务或额外权限。
+
+### 建议实施顺序与验收
+
+1. 先修正文档，删除已证实无使用者的 CSS／翻译；保持视觉和检查结果一致。
+2. 将默认本地预览改为纯静态，历史举报能力从默认路径撤出；验证 /demo、/privacy、SVG MIME、启动无 SQLite 副作用。
+3. 合并字符分析核心；共享各脚本字符测试并验证三个入口策略不变。
+4. 单独处理 CLI schema 与数据投影，验证既有客户兼容性，再决定发布新版本。
+
+本轮验证：npm test 的网站／CLI 20 项通过；插件 node --test extension/tests/*.test.cjs 的 27 项通过；另有本地静态路由探测和 CLI 单例内存投影。未修改实现，因此未重跑整套浏览器视觉用例。未提交、推送或发布本轮审查记录。
+
+## 大扫除落实与网页式插件展示 0.4.0（2026-10-21）
+
+- 用户批准上一节清理建议，并指定更喜欢网页展示逻辑。本次保留来源快照、许可、历史验证记录和已有 runtime/reports.sqlite*，未迁移或删除用户数据库。
+- 默认 server.mjs 改为无数据库静态预览，复用 public/_headers，支持 /demo、/privacy、HEAD 与 SVG MIME。旧举报服务器、store、review CLI 及两项测试移入 archive/reporting/，通过 npm run test:archive 独立复查，不进入默认启动、默认测试或线上部署。
+- 字符解析统一至 src/analyzer.js（30 行）；网页和插件由构建生成入口。删除已不服务实际展示的泛化 ASCII 分组提示；仅保留原始 host、Punycode、非 ASCII 与身份信息边界。品牌算法及 PSL 仍由 src/engine.js 统一提供。
+- 插件 0.4.0 使用与网页一致的品牌差异模型：普通未知域名不因 z/i/w 等字母标黄；Inkd.in 定位 I/l，arnazon.test 定位 rn 与后缀。所有非 ASCII 字符仍提示；可聚焦／悬停／点击标记字符突出对应解释。参考域名与来源链接分开，打开原网址仍需主动点击。无自动悬停、内容脚本或新增权限。
+- 公司数据通过 scripts/build-runtime-references.mjs 生成最小运行时投影；全量来源证据不变。CLI 默认 schemaVersion 升至 2，annotations[].match 改为精简候选引用，调用方需适配旧内嵌 company 对象。arnazon.test 单例约 7.5 KB → 1.4 KB；独立 CLI 1156447 → 598316 字节。
+- 网页清除 59 个无使用者选择器，合并为 src/site.css 单一源码，生成 public/style.css，移除 public/explain.css。线上 CSS 从 18933 → 15827 字节。原版与新版在 1440/390 宽度、品牌／Unicode／已知 host 及展开参考库状态的关键计算样式一致。
+- 清理插件重复覆盖样式及无引用翻译，保留原生工具栏弹窗与独立页居中差异。英文／中文商店描述、权限指南、截图及隐私政策同步新品牌检查能力。
+- 验证：网站／CLI 21 项、插件 26 项、归档原型 2 项通过；网站与最终 ZIP 的隔离 Chromium 回归通过（含原生工具栏 POPUP、真正跳转目标的本地拦截验证、IME、全部非 ASCII 示例、zhaidewei.com 无泛化高亮和 rn/m 差异联动）。系统原生菜单的物理鼠标点击仍未自动化，同一处理函数及原生弹窗已验证。
+- 0.4.0 插件 ZIP 175331 字节；加入品牌参考与 PSL 后比 0.3.8 大，运行时不联网。核对 ZIP 中每个文件与当前源码一致，manifest 仅 activeTab/contextMenus，随包补充 tldts 两份许可证。4 张 1280×800 RGB 无 alpha 真实截图与商店材料已生成，另提供可直接加载的独立解压目录。
+- 源码与材料待同步，线上待回读；未代用户上传或提交 Chrome Web Store。

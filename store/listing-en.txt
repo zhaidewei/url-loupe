@@ -1,46 +1,30 @@
 NAME
 URL Loupe
 
-SHORT DESCRIPTION (manifest, under 132 characters)
-Inspect non-ASCII and visually similar hostname characters locally, from links, the toolbar or host + Tab.
+SHORT DESCRIPTION
+Inspect non-ASCII hostnames and brand lookalikes locally. Right-click links, use the toolbar or type host + Tab.
 
 DETAILED DESCRIPTION
 A closer look at every URL.
 
-URL Loupe makes hostname characters easier to inspect. It highlights all non-ASCII characters and offers visual character hints, including ASCII lookalikes such as I/l and character combinations such as rn/m.
+URL Loupe explains the parts of a hostname worth checking. All non-ASCII characters are highlighted. When a hostname resembles a reference brand, only the actual differences are marked, such as rn instead of m or a different domain suffix. Ordinary English letters are not highlighted just because they could look like another character.
 
 Three ways to inspect:
-• Right-click a link, selected URL or page and choose “Inspect with URL Loupe”. The toolbar popup opens while the current webpage stays active; the inspected website is not visited automatically. For links, the actual destination is checked even if the visible text differs.
-• Open the toolbar popup to inspect the current tab URL or paste a URL for instant results.
-• Type “host”, press Tab in Chrome’s address bar, and enter a URL. Press Enter to open a local, highlighted review page instead of visiting the destination.
+• Right-click a link, selected URL or page and choose “Inspect with URL Loupe”. The native toolbar popup opens while the webpage stays active. The actual link destination is checked, even if its visible text differs.
+• Open the toolbar popup to inspect the current tab or paste a URL for instant results. Bare domains such as example.com also work.
+• Type host, press Tab in Chrome’s address bar, and enter a URL. Enter opens a local review page.
 
-What you see:
-• Pink highlights for non-ASCII hostname characters, including legitimate internationalized domain names.
-• Gold outlines for visually similar characters, with Unicode code points and character hints.
-• The actual ASCII / Punycode hostname used by the browser.
-• The original hostname when normalization changes it.
+Pink marks non-ASCII characters. Gold marks brand differences. Focus, hover or click a highlighted character to connect it with its explanation. Expand Check details for ASCII/Punycode and character information.
 
-Private by design:
-• Inspection runs locally. The extension does not automatically visit inspected websites or send inspection results to a server.
-• No account, ads, analytics or stored browsing history.
-• Bundled code and Unicode mappings; no remote executable code.
-• English and Simplified Chinese. The popup includes a language toggle.
+An exact match in the 6,890-host reference set suppresses generic ASCII hints. Brand comparison uses references for 671 companies and manually sourced brand aliases. The Google CrUX September 2026 Top 5,000 origin buckets contribute exact hostname references, not additional fuzzy-brand targets. CrUX data is attributed under CC BY 4.0. This independent project is not endorsed by Google.
 
-Important limits:
-Character highlights are reading aids, not a phishing verdict. Ordinary ASCII words and legitimate internationalized domain names can be highlighted. This extension version does not compare company brands, query reputation lists, inspect certificates, trace redirects or block navigation. Chrome’s ordinary address bar is not intercepted or recolored. Link inspection is limited to supported HTTP(S) pages; browser pages, restricted pages, PDF viewers and iframe links may not be covered.
+Inspection runs locally with bundled code and data. Only activeTab and contextMenus permissions are requested. There are no content scripts, broad website access, automatic hover popups, accounts, ads, analytics or stored browsing history. No inspected URLs or results are sent to a server for analysis.
 
+After inspection, choose Open original URL to visit the destination in a new tab. Paths, query parameters and fragments are preserved; embedded credentials are removed. The original URL is handed off in memory and is not stored in the review address. Reloading can discard that link.
+
+Character and brand hints do not establish whether a site is safe or malicious. Heuristic matches can be wrong or incomplete; legitimate internationalized domains also contain non-ASCII characters. No reputation service, TLS certificate lookup, redirect tracing or navigation blocking is used. Chrome’s ordinary address bar is not intercepted or recolored.
+
+English and Simplified Chinese. Requires Chrome 127 or later.
 Website: https://loupe.zhaidewei.com/
 Source and support: https://github.com/zhaidewei/url-loupe
 Privacy: https://loupe.zhaidewei.com/privacy.html
-
-Saved hostname matching: An exact match to a bundled reference hostname hides generic ASCII lookalike hints. This is not a safety allowlist. Non-ASCII input is still highlighted. Subdomains and similar spellings are not automatically exempted.
-
-The bundled reference set contains 6,890 unique hostnames, merging existing records with hostname-only data from Google CrUX September 2026 Top 5,000 origin buckets. CrUX data is attributed under CC BY 4.0. This is an independent project, not a Google product or endorsement.
-
-The compact result shows the hostname and check statuses. Passing checks are green; explanations appear when character concerns are found. ASCII/Punycode, code points and usage help are available in expandable details. A hostname absent from the reference set is shown neutrally.
-
-After inspection, choose “Open original URL” to visit the destination in a new tab. Paths, query parameters and fragments are preserved; embedded credentials are removed. The original URL is passed once in memory and is not stored in the review address. Reloading the review page can discard the original link.
-
-Requires Chrome 127 or later.
-
-Uses only activeTab and contextMenus permissions. No broad website access, content scripts or automatic link-hover inspection.

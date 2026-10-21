@@ -1,6 +1,6 @@
 {
   "name": "url-loupe",
-  "version": "0.3.8",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -10,8 +10,9 @@
     "build": "node scripts/build.mjs",
     "start": "node server.mjs",
     "test": "node --test tests/*.test.mjs",
-    "review": "node scripts/review.mjs",
-    "cli": "node cli/url-loupe.mjs"
+    "cli": "node cli/url-loupe.mjs",
+    "test:extension": "node --test extension/tests/*.test.cjs",
+    "test:archive": "node --test archive/reporting/*.test.mjs"
   },
   "dependencies": {
     "tldts": "7.0.27"

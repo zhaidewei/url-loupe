@@ -5,19 +5,16 @@
   function describe(text) {
     if (!text.trim()) return {description:tr('输入网址或域名，检查字符；<dim>按回车查看完整高亮，不访问目标网站</dim>'), suggestions:[]};
     try {
-      const data=HostLens.analyze(text);
-      const original=data.originalTokens || data.tokens;
-      const canonicalCount=data.tokens.filter(t=>t.nonAscii).length;
-      const originalCount=original.filter(t=>t.nonAscii).length;
-      const tokens=canonicalCount > originalCount ? data.tokens : original;
-      const nonAscii=Math.max(canonicalCount,originalCount);
+      const data=HostLensAnalysis.inspect(text);
+      const tokens=data.displayTokens;
+      const nonAscii=tokens.filter(t=>t.nonAscii).length;
       const similar=tokens.filter(t=>t.similar).length;
       const content=data.originalHost;
       const details=[]; const seen=new Set();
       for(const token of tokens){
         if((!token.nonAscii && !token.similar) || seen.has(token.char))continue;
         seen.add(token.char);
-        details.push({content,description:'<match>'+escape(token.char)+'</match> '+escape(token.code)+' <dim>'+escape([tr(token.nonAscii?'非 ASCII':'ASCII'),...token.hints.map(tr)].join('；'))+'</dim>'});
+        details.push({content,description:'<match>'+escape(token.char)+'</match> '+escape(token.code)+' <dim>'+escape([tr(token.nonAscii?'非 ASCII':'ASCII'),...token.annotations.map(a=>tr(a.title))].join('；'))+'</dim>'});
         if(details.length===4)break;
       }
       return {

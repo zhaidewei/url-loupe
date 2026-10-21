@@ -1,4 +1,4 @@
-# URL Loupe 网站 v0.3.8
+# URL Loupe 网站 v0.4.0
 
 输入网址，即时检查 host 中的非 ASCII 字符、视觉相似字符与公司域名相似候选。所有字符与品牌比对在浏览器本地完成，不访问输入的目标网站。
 
@@ -68,15 +68,15 @@ node cli/url-loupe.mjs --help
 
 ## 静态部署与举报计划
 
-网站运行仅需托管 public/ 中的静态文件，页面不调用举报或黑名单 API；可部署到 zhaidewei.com 的子域名根目录。域名、DNS 与托管尚未配置。
+网站仅需托管 public/ 静态文件，不调用举报或黑名单 API。已部署于 https://loupe.zhaidewei.com，配置见 wrangler.toml。默认本地预览也仅提供静态文件，不创建或打开数据库。
 
-举报入口已移除。待项目在 GitHub 开源后，再通过 Issues 接收线索、PR 修改静态名单，并由维护者人工审核。举报 UI 暂未接入 GitHub。
+项目已在 GitHub 开源。举报页面仍未接入；可通过 GitHub Issues 接收线索，再由维护者人工审核，避免增加线上后端。
 
-已有 server.mjs、store.mjs 与 review 脚本保留用于本地历史审核能力，其测试独立保留，当前网页不再使用。
+历史举报原型及其测试已归档到 archive/reporting/，默认启动和测试不加载这组代码。需要复查时运行 npm run test:archive。已有 runtime/reports.sqlite* 文件未移动或删除。
 
 ## 数据文件与发布
 
-默认数据库位于 `runtime/reports.sqlite`。SQLite 使用 WAL 模式；正式备份应使用 SQLite 在线备份接口或先停服务，避免只复制主文件造成遗漏。本版使用 Node 的内置 SQLite 模块，在当前 Node 22 中仍有实验性提示。
+仅归档举报原型使用 `runtime/reports.sqlite`，默认静态预览无 SQLite 依赖。历史库采用 WAL，备份应使用 SQLite 在线备份接口或先停旧服务，不单独复制主文件。
 
 源码压缩包不包含 `node_modules/` 或 `runtime/`，包含已构建前端、lockfile、参考数据和来源快照。测试不会在运行数据库中留下示例举报。
 
@@ -86,7 +86,7 @@ node cli/url-loupe.mjs --help
 npm test
 ```
 
-17 项自动测试覆盖字符／品牌比对、参考库结构、PSL、举报持久化、批准／驳回／撤销、审核日志和请求校验。浏览器测试需额外准备隔离的 Playwright/Chromium，通过 `PLAYWRIGHT_MODULE` 和 `PLAYWRIGHT_BROWSERS_PATH` 指定已有工具，再运行 `node tests/browser.mjs`。
+默认测试覆盖字符／品牌比对、参考库投影一致性、PSL、CLI schema v2 与静态预览；插件测试运行 npm run test:extension，历史审核测试独立运行 npm run test:archive。浏览器测试需额外准备隔离的 Playwright/Chromium，通过 `PLAYWRIGHT_MODULE` 和 `PLAYWRIGHT_BROWSERS_PATH` 指定已有工具，再运行 `node tests/browser.mjs`。
 
 本次桌面与手机宽度测试、输入即时更新、品牌差异、非 ASCII 脚本、来源搜索、无举报入口或 API 请求均通过；没有访问目标测试域名，也无浏览器脚本错误。详见 [VALIDATION.md](VALIDATION.md)。
 
@@ -100,4 +100,10 @@ Wikidata 结构化数据采用 CC0；Unicode 数据、punycode.js、tldts 和 tl
 
 ## Chrome 商店材料
 
-extension/ 当前商店准备版为 0.3.8，新增英文／简体中文与面板语言切换，仍仅做字符检查。打包运行 `node scripts/package-extension.mjs`。商店介绍、权限与隐私填写说明及图片在 store/，公开隐私政策为 https://loupe.zhaidewei.com/privacy.html 。插件 ZIP 已在隔离 Chrome 中加载验证；尚未上传或提交商店审核。
+extension/ 当前商店准备版为 0.4.0，使用与网页共享的字符与品牌比对核心，只突出非 ASCII 字符和实际品牌差异；保留英中切换与最小权限。打包运行 `node scripts/package-extension.mjs`。商店介绍、权限与隐私填写说明及图片在 store/，公开隐私政策为 https://loupe.zhaidewei.com/privacy.html 。插件 ZIP 已在隔离 Chrome 中加载验证；尚未上传或提交商店审核。
+
+## 0.4.0 的源码与 CLI 兼容说明
+
+字符核心为 src/analyzer.js；网页样式源为 src/site.css。npm run build 生成网页、插件和 CLI 产物，不手工编辑生成文件。data/runtime-references.json 是最小运行时投影，完整数据、来源快照和许可均保留。
+
+CLI 默认 JSON schemaVersion 从 1 升至 2。annotations[].match 改为精简候选引用，不再重复内嵌完整公司与来源记录；顶层 matches、references、host 的职责保留。使用旧 annotation.match.company 对象的调用方需适配 v2。

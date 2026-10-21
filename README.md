@@ -11,7 +11,7 @@ A closer look at every URL. Inspect non-ASCII hostname characters and brand look
 
 - **Website**: instant character and brand comparison, fragment-to-explanation links, English by default with a Chinese toggle.
 - **CLI**: offline JSON Lines output for scripts and AI agents; bundled references, no runtime dependencies.
-- **Chrome extension**: character inspection through the right-click menu (links, selected URLs and pages), popup and `host` + Tab. The extension is an earlier character-only version; website brand matching has not yet been ported. It supports English and Simplified Chinese, with a popup language toggle.
+- **Chrome extension**: character inspection through the right-click menu (links, selected URLs and pages), popup and `host` + Tab. The extension shares the website’s brand comparison and highlights actual differences instead of generic ASCII lookalikes. It supports English and Simplified Chinese, with a popup language toggle.
 
 ## Run locally
 
@@ -26,13 +26,15 @@ node cli/url-loupe.mjs --stdin < urls.txt
 node cli/url-loupe.mjs --help
 ```
 
-The website itself is static: serve the **public/** directory using any static host. It makes no report or blacklist API requests. The included Node server is a local preview tool with legacy moderation code; do not expose that backend as a production service without reviewing it.
+The website itself is static: serve the **public/** directory using any static host. It makes no report or blacklist API requests. The included Node server is a static preview with no database or reporting API. Historical moderation code and tests are retained under archive/reporting/; existing runtime databases are untouched.
 
 Requires Chrome 127+. Right-click inspection opens the toolbar popup without leaving the page. Load **extension/** as an unpacked extension from Chrome's developer-mode extension page. It uses only contextMenus and activeTab for user-initiated inspection, with no content scripts or broad host permissions. It cannot recolor or intercept ordinary address-bar input.
 
 ## CLI contract
 
-One JSON object per input, with schemaVersion: 1. Results include ASCII/Unicode hosts, non-ASCII code points, brand candidates and reference sources. Full input URLs, credentials, paths and query strings are not echoed. Prefer --stdin for sensitive input to avoid shell history and process arguments.
+One JSON object per input, with schemaVersion: 2. Results include ASCII/Unicode hosts, non-ASCII code points, brand candidates and reference sources. Full input URLs, credentials, paths and query strings are not echoed. Prefer --stdin for sensitive input to avoid shell history and process arguments.
+
+Version 0.4.0 changes the JSON contract from v1 to v2: annotation.match is now a compact candidate reference rather than an embedded company/source record. Top-level matches, references and hostname fields retain their roles. Consumers of the old annotation payload must adapt to schemaVersion 2. Full source snapshots remain in data/.
 
 Exit codes: **0** completed; **1** findings when --fail-on-findings is enabled; **2** invalid input, usage or execution error. Invalid batch records produce structured errors and processing continues. JSON field names are English; explanatory strings currently follow the Chinese engine. No result certifies safety.
 
@@ -51,7 +53,7 @@ npm test
 node --test extension/tests/*.test.cjs
 ```
 
-Builds generate public/engine.js and cli/url-loupe.mjs. Browser integration tests additionally require Playwright and an isolated Chromium installation; configure PLAYWRIGHT_MODULE and PLAYWRIGHT_BROWSERS_PATH before running node tests/browser.mjs.
+Builds generate the website and extension analyzers, public/engine.js, public/style.css and cli/url-loupe.mjs. Shared analyzer source is src/analyzer.js; CSS source is src/site.css. A minimal data/runtime-references.json projection feeds CLI and extension builds; full source evidence remains intact. Run npm run test:archive separately for the archived prototype. Browser integration tests additionally require Playwright and an isolated Chromium installation; configure PLAYWRIGHT_MODULE and PLAYWRIGHT_BROWSERS_PATH before running node tests/browser.mjs.
 
 ## License
 
@@ -59,7 +61,7 @@ Original code: MIT. Third-party code and Unicode data retain their licenses in p
 
 ## Deployment
 
-Cloudflare Workers Static Assets configuration is in wrangler.toml. Only public/ is deployed; the local Node/SQLite backend and extension are not uploaded. The configured custom domain is https://loupe.zhaidewei.com.
+Cloudflare Workers Static Assets configuration is in wrangler.toml. Only public/ is deployed; the local preview, archived Node/SQLite prototype and extension are not uploaded. The configured custom domain is https://loupe.zhaidewei.com.
 
 Deploy from this repository with Wrangler 4.127.0 after building and testing. Authenticate locally; do not put API tokens in tracked files. The custom domain requires access to the zhaidewei.com Cloudflare zone. DNS and TLS are managed by Cloudflare.
 
@@ -71,4 +73,4 @@ npx wrangler@4.127.0 deploy
 
 ## Chrome Web Store package
 
-The extension is version 0.3.8. Run `node scripts/package-extension.mjs` to build the upload ZIP with manifest.json at its root. Store copy and submission notes are in [store/](store/). Public privacy policy: https://loupe.zhaidewei.com/privacy.html. The developer dashboard submission has not been performed.
+The extension is version 0.4.0. Run `node scripts/package-extension.mjs` to build the upload ZIP with manifest.json at its root. Store copy and submission notes are in [store/](store/). Public privacy policy: https://loupe.zhaidewei.com/privacy.html. The developer dashboard submission has not been performed.

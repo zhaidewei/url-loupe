@@ -2,7 +2,7 @@ import {createRequire} from 'node:module';import {mkdtempSync,rmSync} from 'node
 import {createApp} from '../server.mjs';
 const require=createRequire(import.meta.url);const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');const tmp=mkdtempSync(path.join(os.tmpdir(),'host-lens-web-browser-'));
-const {server,store}=await createApp({dbPath:path.join(tmp,'reports.sqlite')});await new Promise(r=>server.listen(0,'127.0.0.1',r));
+const {server}=await createApp({dbPath:path.join(tmp,'reports.sqlite')});await new Promise(r=>server.listen(0,'127.0.0.1',r));
 const origin='http://127.0.0.1:'+server.address().port;let browser;
 try{
  browser=await chromium.launch({channel:'chromium',headless:true});const page=await browser.newPage({viewport:{width:1440,height:1100}});const errors=[],requests=[];

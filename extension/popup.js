@@ -7,7 +7,7 @@ const result=document.getElementById('result').attachShadow({mode:'open'});
 function check(value){
   error.textContent='';openLink.hidden=true;openLink.removeAttribute('href');
   if(!value.trim()){result.replaceChildren();return;}
-  try{HostLensView.render(result,HostLens.analyze(value));
+  try{HostLensView.render(result,HostLensAnalysis.inspect(value));
     const target=reviewHandoff && value===reviewHost ? reviewTarget : value;
     if(target){
       const text=target.trim();
@@ -49,5 +49,5 @@ for(const button of document.querySelectorAll('[data-example]'))button.addEventL
 })();
 
 const originalText=new Map();for(const el of document.querySelectorAll('header p,label,.examples span,.examples button'))originalText.set(el,el.textContent);const originalPlaceholder=input.placeholder;
-function applyLanguage(){openLink.textContent=HostLensI18n.lang==='en'?'Open original URL ↗':'打开原网址 ↗';document.documentElement.lang=HostLensI18n.lang==='en'?'en':'zh-CN';for(const [el,text]of originalText)el.textContent=HostLensI18n.text(text);input.placeholder=HostLensI18n.text(originalPlaceholder);document.getElementById('language').textContent=HostLensI18n.lang==='en'?'中文':'English';document.getElementById('examples-label').textContent=HostLensI18n.lang==='en'?'Examples':'示例';document.getElementById('help-label').textContent=HostLensI18n.lang==='en'?'Help':'帮助';document.getElementById('privacy').textContent=HostLensI18n.lang==='en'?'Privacy':'隐私政策';document.getElementById('usage').textContent=HostLensI18n.lang==='en'?'Right-click a link → Inspect with URL Loupe. Also supports host + Tab. Pink: non-ASCII. Gold: lookalikes.':'右键链接 → 使用 URL Loupe 检查。也支持 host + Tab。粉色＝非 ASCII；金框＝形似字符。';if(input.value.trim())check(input.value);}
+function applyLanguage(){openLink.textContent=HostLensI18n.lang==='en'?'Open original URL ↗':'打开原网址 ↗';document.documentElement.lang=HostLensI18n.lang==='en'?'en':'zh-CN';for(const [el,text]of originalText)el.textContent=HostLensI18n.text(text);input.placeholder=HostLensI18n.text(originalPlaceholder);document.getElementById('language').textContent=HostLensI18n.lang==='en'?'中文':'English';document.getElementById('examples-label').textContent=HostLensI18n.lang==='en'?'Examples':'示例';document.getElementById('help-label').textContent=HostLensI18n.lang==='en'?'Help':'帮助';document.getElementById('privacy').textContent=HostLensI18n.lang==='en'?'Privacy':'隐私政策';document.getElementById('usage').textContent=HostLensI18n.lang==='en'?'Right-click a link → Inspect with URL Loupe. Also supports host + Tab. Pink: non-ASCII. Gold: brand differences.':'右键链接 → 使用 URL Loupe 检查。也支持 host + Tab。粉色＝非 ASCII；金色＝品牌差异。';if(input.value.trim())check(input.value);}
 document.getElementById('language').addEventListener('click',()=>{HostLensI18n.lang=HostLensI18n.lang==='en'?'zh':'en';applyLanguage();});applyLanguage();

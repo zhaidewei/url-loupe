@@ -55,3 +55,9 @@ CrUX 数据采用 Google 明示的 CC BY 4.0，署名、原始链接、修改说
 `node scripts/import-crux.mjs` 校验本地快照并重新提取（需要 xz 解压工具）；`--refresh` 重新下载同一固定提交，校验值变化即失败。`node scripts/build-known-hosts.mjs` 从原有记录和已提取 CrUX host 生成排序去重的 public/known-hosts.json 与 extension/known-hosts.js。普通构建无需 xz 或联网。
 
 运行时合并表只含域名字符串，没有名称、排名、来源或日期字段。它仅用于完整 host 精确匹配时隐藏普通 ASCII 字符提示，不扩大至未收录子域、不取消非 ASCII 提示、不新增 CrUX 品牌模糊比对，也不认证网站安全。
+
+## 最小运行时投影（0.4.0）
+
+`scripts/build-runtime-references.mjs` 从完整 companies.json 与人工品牌补充生成 data/runtime-references.json，仅保留 ID、名称、官网域名、sitelinks 权重、来源 URL 和界面所需的元数据。插件和独立 CLI 使用该投影，品牌排序、域名与来源链接不变；公司条目与模糊比较的等价性由 tests/references.test.mjs 验证。
+
+投影不替代完整证据。原始实体、声明、采集记录、许可和完整 public/companies.json 均保留。共享字符源码位于 src/analyzer.js，入口构建分别生成网站与插件产物，禁止手工维护两个检测副本。
