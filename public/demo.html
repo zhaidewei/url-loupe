@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>URL Loupe · Demo</title><meta name="description" content="Safe, simulated hostname examples for demonstrating URL Loupe."><link rel="icon" href="demo-icon.svg"><link rel="stylesheet" href="demo.css"><script src="demo.js" defer></script></head>
+<body><main>
+<header><a class="brand" href="/" aria-label="URL Loupe home"><img src="demo-icon.svg" width="36" height="36" alt=""><span>URL Loupe</span></a><button id="language" type="button" aria-label="Switch language">中文</button></header>
+<section class="intro"><p class="eyebrow" data-en="THE RIGHT-CLICK DEMO" data-zh="右键检查演示">THE RIGHT-CLICK DEMO</p><h1 data-en="Look closer before you click." data-zh="点击之前，仔细看一眼。">Look closer before you click.</h1><p data-en="Right-click a link → Inspect with URL Loupe" data-zh="右键点击链接 → 使用 URL Loupe 检查">Right-click a link → Inspect with URL Loupe</p></section>
+<div class="examples">
+<article><div class="number">01</div><div class="example"><h2 data-en="A familiar hostname" data-zh="熟悉的域名">A familiar hostname</h2><a class="demo-link" id="known-link" href="https://chatgpt.com/" draggable="false">https://chatgpt.com</a><p data-en="An exact match in the bundled reference set." data-zh="与随包参考库中的域名精确匹配。">An exact match in the bundled reference set.</p></div></article>
+<article><div class="number">02</div><div class="example"><h2 data-en="Looks like apple" data-zh="看起来像 apple">Looks like apple</h2><a class="demo-link" id="unicode-link" href="https://аррӏе.test/login" draggable="false">https://аррӏе.test/login</a><p data-en="Cyrillic letters hiding in plain sight." data-zh="外观相似，实际使用西里尔字母。">Cyrillic letters hiding in plain sight.</p></div></article>
+<article><div class="number">03</div><div class="example"><h2 data-en="Looks like amazon" data-zh="看起来像 amazon">Looks like amazon</h2><a class="demo-link" id="ascii-link" href="https://arnazon.test/login" draggable="false">https://arnazon.test/login</a><p data-en="Two letters, rn, can resemble one m." data-zh="两个字母 rn，可能看起来像一个 m。">Two letters, rn, can resemble one m.</p></div></article>
+</div>
+<p id="notice" role="status" aria-live="polite"></p>
+<footer><p data-en="The .test links are simulated examples. Normal clicks stay on this page." data-zh=".test 链接均为模拟示例，普通点击会停留在本页。">The .test links are simulated examples. Normal clicks stay on this page.</p><p data-en="Character hints help you read a hostname. They do not establish website safety." data-zh="字符提示辅助核对域名，不代表网站安全判定。">Character hints help you read a hostname. They do not establish website safety.</p></footer>
+<noscript>This demo needs JavaScript to prevent ordinary link navigation. Enable it before recording.</noscript>
+</main></body></html>

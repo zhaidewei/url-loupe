@@ -4,6 +4,9 @@ A closer look at every URL. Inspect non-ASCII hostname characters and brand look
 
 [中文说明](README.zh-CN.md) · [License](LICENSE)
 
+
+[Recording demo](https://loupe.zhaidewei.com/demo): normal and simulated lookalike links for right-click inspection. Ordinary clicks stay on the demo page.
+
 ## Three interfaces
 
 - **Website**: instant character and brand comparison, fragment-to-explanation links, English by default with a Chinese toggle.
